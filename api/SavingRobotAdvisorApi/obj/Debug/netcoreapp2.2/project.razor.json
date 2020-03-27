@@ -1,0 +1,19 @@
+{
+  "FilePath": "d:\\Miscellaneous\\OneDrive\\Documents\\Education\\NUS\\SourcCode\\IRS-MRS-2020-01-18-IS02PT-GRP-4M-SavingRobotAdvisor\\api\\SavingRobotAdvisorApi\\SavingRobotAdvisorApi.csproj",
+  "Configuration": {
+    "ConfigurationName": "MVC-2.1",
+    "LanguageVersion": "2.1",
+    "Extensions": [
+      {
+        "ExtensionName": "MVC-2.1"
+      }
+    ]
+  },
+  "ProjectWorkspaceState": {
+    "TagHelpers": [],
+    "CSharpLanguageVersion": 703
+  },
+  "RootNamespace": "SavingRobotAdvisorApi",
+  "Documents": [],
+  "SerializationFormat": "0.2"
+}
