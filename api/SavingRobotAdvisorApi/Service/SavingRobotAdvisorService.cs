@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 using SavingRobotAdvisorApi.Models;
 using SavingRobotAdvisorApi.Common;
+using System;
 
 namespace SavingRobotAdvisorApi.Service
 {
     public class SavingRobotAdvisorService{
-        private List<BankInfo> bankInfos = null;
-
         public OptimalResult GetOptimalResult(decimal monthlyIncome, decimal savingBalance, decimal monthlyCreditCardSpendingAmount)
         {
             OptimalResult optimalResult = null;
 
-            bankInfos = new List<BankInfo>();
-            bankInfos.Add(new BankInfo(){BankName=Bank.UOB, SavingAccountType=SavingAccountType.UOBONE,CreditCardType=CreditCardType.UOBONE});
-
             List<CalculationResult> results = new List<CalculationResult>();
 
-            foreach(var bankInfo in bankInfos)
+            foreach (Bank bankName in Enum.GetValues(typeof(Bank)))
             {
-                results.Add(CalculationFactory.GetCalculationResult(bankInfo, monthlyIncome, savingBalance, monthlyCreditCardSpendingAmount));
+                if(bankName != Bank.Unkonwn)
+                {
+                    results.Add(CalculationFactory.GetCalculationResult(bankName, monthlyIncome, savingBalance, monthlyCreditCardSpendingAmount));
+                }
             }
             
             results.Sort((x,y) => x.TotalSavingAmount.CompareTo(y.TotalSavingAmount));
@@ -27,16 +26,15 @@ namespace SavingRobotAdvisorApi.Service
             {
                 optimalResult = new OptimalResult()
                 {
-                    bank = results[0].BankInfo.BankName.GetDescription(),
-                    account = results[0].BankInfo.SavingAccountType.GetDescription(),
-                    card = results[0].BankInfo.CreditCardType.GetDescription(),
-                    interest = results[0].InterestResult.InterestAmount,
-                    interest_rate = results[0].InterestResult.InterestRate,
-                    rebate = results[0].RebateResult.RebateAmount,
-                    rebate_rate = results[0].RebateResult.RebateRate
+                    bank = results[0].BankName.GetDescription(),
+                    account = results[0].SavingAccountType.GetDescription(),
+                    card = results[0].CreditCardType.GetDescription(),
+                    interest = Math.Round(results[0].InterestResult.InterestAmount, 2, MidpointRounding.ToEven),
+                    interest_rate = Math.Round(results[0].InterestResult.InterestRate, 2, MidpointRounding.ToEven),
+                    rebate = Math.Round(results[0].RebateResult.RebateAmount, 2, MidpointRounding.ToEven),
+                    rebate_rate = Math.Round(results[0].RebateResult.RebateRate, 2, MidpointRounding.ToEven)
                 };
             }
-
             
             return optimalResult;
         }

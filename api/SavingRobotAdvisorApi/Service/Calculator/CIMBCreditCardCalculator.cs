@@ -1,6 +1,8 @@
-namespace SavingRobotAdvisorApi.Models
+using SavingRobotAdvisorApi.Models;
+
+namespace SavingRobotAdvisorApi.Service
 {
-    public class UOBOneCreditCardCalculator : ICalculator<RebateResult>
+    public class CIMBCreditCardCalculator : ICalculator<RebateResult>
     {
         public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
         {

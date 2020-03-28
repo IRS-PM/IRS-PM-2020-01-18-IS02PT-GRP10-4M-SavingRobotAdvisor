@@ -2,6 +2,7 @@ namespace SavingRobotAdvisorApi.Common
 {
     public enum Bank
     {
+        Unkonwn = 0,
         UOB = 1,
         OCBC = 2,
         DBS = 3,
@@ -14,6 +15,7 @@ namespace SavingRobotAdvisorApi.Common
 
     public enum SavingAccountType
     {
+        Unkonwn = 0,
         UOBONE = 1,
         OCBC360 = 2,
         Multiplier = 3,
@@ -26,7 +28,16 @@ namespace SavingRobotAdvisorApi.Common
 
     public enum CreditCardType
     {
+        Unkonwn = 0,
         UOBONE = 1,
-        Everyday = 2
+
+        OCBC365 = 2,
+        POSBEveryday = 3,
+        SCUnlimitedCashback = 4,
+
+        BOCFamily = 5,
+        MaybankFamilyAndFriends = 6,
+        CitiCashback=7,
+        CIMBSignature=8
     }
 }
