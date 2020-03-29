@@ -2,26 +2,26 @@ using SavingRobotAdvisorApi.Models;
 
 namespace SavingRobotAdvisorApi.Service
 {
+    //Rebate Table: https://www.posb.com.sg/personal/cards/credit-cards/posb-everyday-card
     public class DBSCreditCardCalculator : ICalculator<RebateResult>
     {
         public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
         {
-            decimal ruleMinimumSpend = 500;
+            decimal ruleMinimumSpend = 0;
             decimal rebate = 0;
+            decimal rebateRate = 0;
             int duration = 12;
 
-            if(ruleMinimumSpend>=500 && ruleMinimumSpend < 1500)
+            if(ruleMinimumSpend < monthlyCreditCardSpendingAmount)
             {
-                rebate = monthlyCreditCardSpendingAmount * 3.30m/100 * duration;
-            }
-            else if(ruleMinimumSpend >= 1500)
-            {
-                rebate = monthlyCreditCardSpendingAmount * 5.00m/100 * duration;
+                decimal averageRebateRate = (5m+3m+1m)/3;
+                rebate = monthlyCreditCardSpendingAmount*duration * averageRebateRate/100;
+                rebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
             }
 
             var result = new RebateResult();
             result.RebateAmount = rebate;
-            result.RebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
+            result.RebateRate = rebateRate;
 
             return result;
         }

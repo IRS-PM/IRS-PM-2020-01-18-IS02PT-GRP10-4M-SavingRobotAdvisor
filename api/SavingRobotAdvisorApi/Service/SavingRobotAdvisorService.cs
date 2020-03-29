@@ -6,10 +6,9 @@ using System;
 namespace SavingRobotAdvisorApi.Service
 {
     public class SavingRobotAdvisorService{
-        public OptimalResult GetOptimalResult(decimal monthlyIncome, decimal savingBalance, decimal monthlyCreditCardSpendingAmount)
+        public List<OptimalResult> GetOptimalResult(decimal monthlyIncome, decimal savingBalance, decimal monthlyCreditCardSpendingAmount)
         {
-            OptimalResult optimalResult = null;
-
+            List<OptimalResult> optimalResults = new List<OptimalResult>();
             List<CalculationResult> results = new List<CalculationResult>();
 
             foreach (Bank bankName in Enum.GetValues(typeof(Bank)))
@@ -22,21 +21,21 @@ namespace SavingRobotAdvisorApi.Service
             
             results.Sort((x,y) => x.TotalSavingAmount.CompareTo(y.TotalSavingAmount));
             
-            if(results.Count>0)
+            foreach(CalculationResult result in results)
             {
-                optimalResult = new OptimalResult()
+                optimalResults.Add(new OptimalResult()
                 {
-                    bank = results[0].BankName.GetDescription(),
-                    account = results[0].SavingAccountType.GetDescription(),
-                    card = results[0].CreditCardType.GetDescription(),
-                    interest = Math.Round(results[0].InterestResult.InterestAmount, 2, MidpointRounding.ToEven),
-                    interest_rate = Math.Round(results[0].InterestResult.InterestRate, 2, MidpointRounding.ToEven),
-                    rebate = Math.Round(results[0].RebateResult.RebateAmount, 2, MidpointRounding.ToEven),
-                    rebate_rate = Math.Round(results[0].RebateResult.RebateRate, 2, MidpointRounding.ToEven)
-                };
+                    bank = result.BankName.GetDescription(),
+                    account = result.SavingAccountType.GetDescription(),
+                    card = result.CreditCardType.GetDescription(),
+                    interest = Math.Round(result.InterestResult.InterestAmount, 2, MidpointRounding.ToEven),
+                    interest_rate = Math.Round(result.InterestResult.InterestRate, 2, MidpointRounding.ToEven),
+                    rebate = Math.Round(result.RebateResult.RebateAmount, 2, MidpointRounding.ToEven),
+                    rebate_rate = Math.Round(result.RebateResult.RebateRate, 2, MidpointRounding.ToEven)
+                });
             }
             
-            return optimalResult;
+            return optimalResults;
         }
     }
 }

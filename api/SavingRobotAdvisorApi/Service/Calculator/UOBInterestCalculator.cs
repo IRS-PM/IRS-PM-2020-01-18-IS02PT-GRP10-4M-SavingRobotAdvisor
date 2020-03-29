@@ -2,7 +2,7 @@ using SavingRobotAdvisorApi.Models;
 
 namespace SavingRobotAdvisorApi.Service
 {
-    ///Calculation Table: https://www.uob.com.sg/personal/save/chequeing/one-account.page
+    ///Interest Table: https://www.uob.com.sg/personal/save/chequeing/one-account.page
     public class UOBInterestCalculator : ICalculator<InterestResult>
     {
         public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)

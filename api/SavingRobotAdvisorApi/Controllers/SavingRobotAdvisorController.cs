@@ -15,10 +15,10 @@ namespace SavingRobotAdvisorApi.Controllers
         // Sample : 
         // https://localhost:5001/api/SavingRobotAdvisor/?income=5000&balance=30000&spending=500
         [HttpGet]
-        public ActionResult<OptimalResult> Get(decimal income, decimal balance, decimal spending)
+        public ActionResult<List<OptimalResult>> Get(decimal income, decimal balance, decimal spending)
         {
             var service = new SavingRobotAdvisorService();
-            OptimalResult result = service.GetOptimalResult(income,balance,spending);
+            List<OptimalResult> result = service.GetOptimalResult(income,balance,spending);
 
             return result;
         }

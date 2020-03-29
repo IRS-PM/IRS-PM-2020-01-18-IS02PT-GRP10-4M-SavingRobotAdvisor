@@ -2,26 +2,25 @@ using SavingRobotAdvisorApi.Models;
 
 namespace SavingRobotAdvisorApi.Service
 {
+    //Rebate Table: https://www.sc.com/sg/credit-cards/unlimited-cashback-credit-card/#accordian-terms-conditions
     public class SCCreditCardCalculator : ICalculator<RebateResult>
     {
         public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
         {
-            decimal ruleMinimumSpend = 500;
             decimal rebate = 0;
+            decimal rebateRate = 0;
             int duration = 12;
 
-            if(ruleMinimumSpend>=500 && ruleMinimumSpend < 1500)
+            rebate = monthlyCreditCardSpendingAmount * 1.50m/100 * duration;
+
+            if(monthlyCreditCardSpendingAmount>0)
             {
-                rebate = monthlyCreditCardSpendingAmount * 3.30m/100 * duration;
-            }
-            else if(ruleMinimumSpend >= 1500)
-            {
-                rebate = monthlyCreditCardSpendingAmount * 5.00m/100 * duration;
+                rebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
             }
 
             var result = new RebateResult();
             result.RebateAmount = rebate;
-            result.RebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
+            result.RebateRate = rebateRate;
 
             return result;
         }
