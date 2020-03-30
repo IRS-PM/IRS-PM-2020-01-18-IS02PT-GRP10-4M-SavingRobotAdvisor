@@ -20,7 +20,7 @@ namespace SavingRobotAdvisorApi.Service
                     monthlyRebate = 100;
                 rebate = monthlyRebate * duration;
             }
-            else if(monthlyCreditCardSpendingAmount >= 0)
+            else if(monthlyCreditCardSpendingAmount >= 0 && monthlyCreditCardSpendingAmount < ruleMinimumSpend)
             {
                 rebate = monthlyCreditCardSpendingAmount * 0.20m/100 * duration;
             }
