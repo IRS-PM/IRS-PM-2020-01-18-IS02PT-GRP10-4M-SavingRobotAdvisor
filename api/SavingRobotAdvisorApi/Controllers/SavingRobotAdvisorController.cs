@@ -13,7 +13,7 @@ namespace SavingRobotAdvisorApi.Controllers
     public class SavingRobotAdvisorController : ControllerBase
     {
         // Sample : 
-        // https://localhost:5001/api/SavingRobotAdvisor/?income=5000&balance=30000&spending=500
+        // http://localhost:5000/api/SavingRobotAdvisor/?income=5000&balance=30000&spending=500
         [HttpGet]
         public ActionResult<List<OptimalResult>> Get(decimal income, decimal balance, decimal spending)
         {
