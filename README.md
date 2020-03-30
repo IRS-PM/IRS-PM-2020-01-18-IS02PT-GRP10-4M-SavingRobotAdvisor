@@ -127,9 +127,9 @@ to choose the folder name 'SavingRobotAdvisorApi', which is the source code of d
 1. Press "Ctrl+`" to open Terminal in Visual Studio Code.
 2. Navigate to project folder IRS-MRS-2020-01-18-IS02PT-GRP-4M-SavingRobotAdvisor\api\SavingRobotAdvisorApi
 3. Type command "dotnet build" to wait for build successful status
-4. Type command "dotnet run" to web api application (The default web api URL http://localhost:50001 will be launched and opened in browser)
+4. Type command "dotnet run" to web api application (The default web api URL http://localhost:5000 will be launched and opened in browser)
 5. Copy the below test URL and open it in browser for web api testing
-https://localhost:5001/api/SavingRobotAdvisor/?income=5000&balance=30000&spending=500
+http://localhost:5000/api/SavingRobotAdvisor/?income=5000&balance=30000&spending=500
 6. The below sample response will be returned by web api:
 {
   "bank": "UOB",
