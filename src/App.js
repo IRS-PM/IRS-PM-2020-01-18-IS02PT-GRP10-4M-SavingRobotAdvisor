@@ -16,7 +16,6 @@ import Grid from "@material-ui/core/Grid";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import {compareProducts} from "./resultsManager";
 
 const drawerWidth = 275;
 
@@ -75,18 +74,18 @@ export function SimpleCard(props) {
     return (
         <Card className={classes.root}>
             <CardContent>
-                <img src={process.env.PUBLIC_URL + props.image} />
+                <img alt={props.image} src={process.env.PUBLIC_URL + props.image + '.png'} />
             </CardContent>
             <CardContent>
                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                     Bank: {props.bank}
                 </Typography>
                 <Typography variant="h5" component="h2">
-                    ${props.combined}
+                    ${props.combined.toFixed(2)}
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
-                    Savings interest: ${props.interest} ({props.interest_rate}%)<br/>
-                    Credit cashback: ${props.cashback} ({props.cashback_rate}%)<br/>
+                    Savings interest: ${props.interest.toFixed(2)} ({props.interest_rate.toFixed(2)}%)<br/>
+                    Credit cashback: ${props.cashback.toFixed(2)} ({props.cashback_rate.toFixed(2)}%)<br/>
                 </Typography>
                 <Typography variant="body2" component="p">
                     Bank and CC description
@@ -143,7 +142,13 @@ function ResponsiveDrawer(props) {
         setSavings(event.target.value);
     };
     const compareButtonClick = event => {
-        setResults(compareProducts(income,expense,savings));
+        fetch('http://localhost:5000/api/SavingRobotAdvisor/?income='+income+'&balance='+savings+'&spending='+expense)
+            .then(res => res.json())
+            .then((data) => {
+                data.sort((a, b) => (a.interest + a.rebate > b.interest + b.rebate) ? -1 : 1);
+                setResults(data);
+            })
+            .catch(console.log);
         event.preventDefault();
     };
 
@@ -290,12 +295,12 @@ function ResponsiveDrawer(props) {
                     {results.map(item => (
 
                             <SimpleCard bank={item.bank}
-                                        image={item.image}
-                                        combined={item.interest + item.cashback}
+                                        image={item.card}
+                                        combined={item.interest + item.rebate}
                                         interest={item.interest}
                                         interest_rate={item.interest_rate}
-                                        cashback={item.cashback}
-                                        cashback_rate={item.cashback_rate}
+                                        cashback={item.rebate}
+                                        cashback_rate={item.rebate_rate}
                             />
 
                     ))}
