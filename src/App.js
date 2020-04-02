@@ -10,18 +10,21 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import {AccountBalance, CreditCard, MonetizationOn} from "@material-ui/icons";
+import {AccountBalance, CreditCard, Launch, MonetizationOn} from "@material-ui/icons";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import Link from "@material-ui/core/Link";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const drawerWidth = 275;
 
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
+        marginBottom:10,
     },
     drawer: {
         [theme.breakpoints.up('sm')]: {
@@ -50,19 +53,20 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         padding: theme.spacing(3),
     },
-    form: {
-        margin: theme.spacing(2),
-    },
+
     bullet: {
         display: 'inline-block',
         margin: '0 2px',
         transform: 'scale(0.8)',
     },
     title: {
-        fontSize: 14,
+        fontSize: 16,
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
     },
     pos: {
-        marginBottom: 12,
+        fontSize: 11,
+        marginBottom: 14,
     },
 }));
 
@@ -107,6 +111,7 @@ export function SimpleCard(props) {
 
     return (
         <Card className={classes.root}>
+
             <CardContent>
                 <img alt={props.image} src={process.env.PUBLIC_URL + props.image + '.png'} />
             </CardContent>
@@ -115,8 +120,8 @@ export function SimpleCard(props) {
                     Bank: {props.bank}
                 </Typography>
                 <Typography variant="body2" component="p">
-                    Bank account: <Button target="_blank" href={props.accountUrl} size="small" color="secondary">{props.accountName}</Button><br/>
-                    Credit card: <Button target="_blank" href={props.cardUrl} size="small" color="secondary">{props.cardName}</Button><br/><br/>
+                    Bank account: {props.accountName} <Tooltip title={"Open " + props.accountName + " website"}><Link target="_blank" href={props.accountUrl}><Launch fontSize="inherit"/></Link></Tooltip><br/>
+                    Credit card:  {props.cardName} <Tooltip title={"Open " + props.cardName + " website"}><Link target="_blank" href={props.cardUrl}><Launch fontSize="inherit"/></Link></Tooltip><br/><br/>
                 </Typography>
                 <Typography variant="h7" component="h4">
                     Annual Value: ${props.combined.toFixed(2)}<br/>
@@ -128,6 +133,7 @@ export function SimpleCard(props) {
                 </Typography>
             </CardContent>
             <CardActions>
+
             </CardActions>
 
         </Card>
@@ -153,7 +159,7 @@ function ResponsiveDrawer(props) {
     };
 
     const handleIncomeChange = event => {
-        if (event.target.value.length > 0) {
+        if (event.target.value.length > 0 && event.target.value >= 0) {
             setIncomeError("");
         } else {
             setIncomeError("true");
@@ -161,7 +167,7 @@ function ResponsiveDrawer(props) {
         setIncome(event.target.value);
     };
     const handleExpenseChange = event => {
-        if (event.target.value.length > 0) {
+        if (event.target.value.length > 0 && event.target.value >= 0) {
             setExpenseError("");
         } else {
             setExpenseError("true");
@@ -169,7 +175,7 @@ function ResponsiveDrawer(props) {
         setExpense(event.target.value);
     };
     const handleSavingsChange = event => {
-        if (event.target.value.length > 0) {
+        if (event.target.value.length > 0 && event.target.value >= 0) {
             setSavingsError("");
         } else {
             setSavingsError("true");
@@ -177,15 +183,28 @@ function ResponsiveDrawer(props) {
         setSavings(event.target.value);
     };
     const compareButtonClick = event => {
-        fetch('http://localhost:5000/api/SavingRobotAdvisor/?income='+income+'&balance='+savings+'&spending='+expense)
-            .then(res => res.json())
-            .then((data) => {
-                data.sort((a, b) => (a.interest + a.rebate > b.interest + b.rebate) ? -1 : 1);
-                const results = data.map(processResult);
-                console.log(results);
-                setResults(results);
-            })
-            .catch(console.log);
+        if (income && expense && savings && income >= 0 && expense >= 0 && savings >= 0) {
+            fetch('http://localhost:5000/api/SavingRobotAdvisor/?income='+income+'&balance='+savings+'&spending='+expense)
+                .then(res => res.json())
+                .then((data) => {
+                    data.sort((a, b) => (a.interest + a.rebate > b.interest + b.rebate) ? -1 : 1);
+                    const results = data.map(processResult);
+                    console.log(results);
+                    setResults(results);
+                })
+                .catch(console.log);
+        } else {
+            if (!income) {
+                setIncomeError("true");
+            }
+            if (!expense) {
+                setExpenseError("true");
+            }
+            if (!savings) {
+                setSavingsError("true");
+            }
+        }
+
         event.preventDefault();
     };
 
