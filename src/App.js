@@ -68,6 +68,40 @@ const useStyles = makeStyles(theme => ({
 
 const initialList = [];
 
+let accountInfo = [];
+accountInfo["CitiMaxiGain"]={"name":"Citi MaxiGain","url":"https://www.citibank.com.sg/gcb/deposits/mxgn-savacc.htm"};
+accountInfo["OCBC360"]={"name":"OCBC 360","url":"https://www.ocbc.com/personal-banking/accounts/360-account.html"};
+accountInfo["MaybankSaveUp"]={"name":"Maybank SaveUp","url":"https://www.maybank2u.com.sg/en/personal/saveup/save-up-programme.page"};
+accountInfo["CIMBFastSaver"]={"name":"CIMB FastSaver","url":"https://www.cimbbank.com.sg/en/personal/products/accounts/savings-accounts/cimb-fastsaver-account.html"};
+accountInfo["SCBonusSaver"]={"name":"SC Bonus$aver","url":"https://www.sc.com/sg/save/current-accounts/bonussaver/"};
+accountInfo["Multiplier"]={"name":"DBS Multiplier","url":"https://www.dbs.com.sg/personal/deposits/bank-earn/multiplier"};
+accountInfo["UOBONE"]={"name":"UOB ONE","url":"https://www.uob.com.sg/personal/save/chequeing/one-account.page"};
+accountInfo["BOCSmartSaver"]={"name":"BOC SmartSaver","url":"https://www.bankofchina.com/sg/pbservice/pb1/201611/t20161130_8271280.html"};
+
+let cardInfo = [];
+cardInfo["CitiCashback"]={"name":"Citi Cashback","url":"https://www.citibank.com.sg/gcb/credit_cards/dividend-card.htm"};
+cardInfo["OCBC365"]={"name":"OCBC 365","url":"https://www.ocbc.com/personal-banking/cards/365-cashback-credit-card"};
+cardInfo["MaybankFamilyAndFriends"]={"name":"Maybank Family And Friends","url":"https://www.maybank2u.com.sg/en/personal/cards/credit/maybank-family-and-friends-mastercard.page"};
+cardInfo["CIMBSignature"]={"name":"CIMB Signature","url":"https://www.cimbbank.com.sg/en/personal/products/cards/credit-cards/cimb-visa-signature.html"};
+cardInfo["SCUnlimitedCashback"]={"name":"SC Unlimited Cashback","url":"https://www.sc.com/sg/credit-cards/unlimited-cashback-credit-card/"};
+cardInfo["POSBEveryday"]={"name":"POSB Everyday","url":"https://www.posb.com.sg/personal/cards/credit-cards/posb-everyday-card"};
+cardInfo["UOBONE"]={"name":"UOB ONE","url":"https://www.uob.com.sg/personal/cards/credit/one/"};
+cardInfo["BOCFamily"]={"name":"BOC Family","url":"https://www.bankofchina.com/sg/bcservice/bc1/201605/t20160503_6891836.html"};
+
+function processResult(row) {
+    if (cardInfo[row.card]) {
+        row.cardName = cardInfo[row.card].name;
+        row.cardUrl = cardInfo[row.card].url;
+    }
+
+    if (accountInfo[row.account]) {
+        row.accountName = accountInfo[row.account].name;
+        row.accountUrl = accountInfo[row.account].url;
+    }
+
+    return row
+}
+
 export function SimpleCard(props) {
     const classes = useStyles();
 
@@ -77,24 +111,25 @@ export function SimpleCard(props) {
                 <img alt={props.image} src={process.env.PUBLIC_URL + props.image + '.png'} />
             </CardContent>
             <CardContent>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                <Typography className={classes.title} color="textPrimary" gutterBottom>
                     Bank: {props.bank}
                 </Typography>
-                <Typography variant="h5" component="h2">
-                    ${props.combined.toFixed(2)}
+                <Typography variant="body2" component="p">
+                    Bank account: <Button target="_blank" href={props.accountUrl} size="small" color="secondary">{props.accountName}</Button><br/>
+                    Credit card: <Button target="_blank" href={props.cardUrl} size="small" color="secondary">{props.cardName}</Button><br/><br/>
                 </Typography>
-                <Typography className={classes.pos} color="textSecondary">
+                <Typography variant="h7" component="h4">
+                    Annual Value: ${props.combined.toFixed(2)}<br/>
                     Savings interest: ${props.interest.toFixed(2)} ({props.interest_rate.toFixed(2)}%)<br/>
                     Credit cashback: ${props.cashback.toFixed(2)} ({props.cashback_rate.toFixed(2)}%)<br/>
                 </Typography>
-                <Typography variant="body2" component="p">
-                    Bank and CC description
+                <Typography className={classes.pos} color="textSecondary">
+                    * Effective interest/cashback rate in brackets
                 </Typography>
-                <Button size="small">Learn More</Button>
             </CardContent>
             <CardActions>
-
             </CardActions>
+
         </Card>
     );
 }
@@ -146,7 +181,9 @@ function ResponsiveDrawer(props) {
             .then(res => res.json())
             .then((data) => {
                 data.sort((a, b) => (a.interest + a.rebate > b.interest + b.rebate) ? -1 : 1);
-                setResults(data);
+                const results = data.map(processResult);
+                console.log(results);
+                setResults(results);
             })
             .catch(console.log);
         event.preventDefault();
@@ -245,7 +282,7 @@ function ResponsiveDrawer(props) {
                         <MenuIcon/>
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Bank Account Comparison Kit (BACK)
+                        Savings Robot Advisor
                     </Typography>
                 </Toolbar>
             </AppBar>
@@ -283,18 +320,27 @@ function ResponsiveDrawer(props) {
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <Typography paragraph>
-                    This tool will help you pick the bank account with the
+                    Our robot advisor will help you pick the savings account and credit card with the
                     <ul>
-                        <li>highest interest rate</li>
-                        <li>credit card cash rebates</li>
+                        <li>Highest annual interest on your savings</li>
+                        <li>Best credit card rebate</li>
                     </ul>
-                    based on your net salary, credit card expenses, and cash savings.
+                    You just need to state in the left column your:
+                    <ul>
+                        <li>Monthly net salary</li>
+                        <li>Monthly credit card expenses</li>
+                        <li>Current cash savings</li>
+                    </ul>
                 </Typography>
 
 
                     {results.map(item => (
 
                             <SimpleCard bank={item.bank}
+                                        accountName={item.accountName}
+                                        accountUrl={item.accountUrl}
+                                        cardName={item.cardName}
+                                        cardUrl={item.cardUrl}
                                         image={item.card}
                                         combined={item.interest + item.rebate}
                                         interest={item.interest}
