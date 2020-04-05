@@ -10,7 +10,7 @@ namespace SavingRobotAdvisorApi.Service
             decimal ruleMinimumSpend = 500;
             decimal ruleMinimumSalary = 2000;
             decimal interest = 0;
-            decimal remainingBalance = initialDeposit;
+            decimal interestRate = 0;
 
             if(ruleMinimumSpend <= monthlyCreditCardSpendingAmount && ruleMinimumSalary <= monthlyIncome)
             {
@@ -67,9 +67,14 @@ namespace SavingRobotAdvisorApi.Service
                }
             }
 
+            if(initialDeposit > 0)
+            {
+                interestRate = interest/initialDeposit*100;
+            }
+
             var result = new InterestResult();
             result.InterestAmount = interest;
-            result.InterestRate = interest/initialDeposit*100;
+            result.InterestRate = interestRate;
 
             return result;
         }
