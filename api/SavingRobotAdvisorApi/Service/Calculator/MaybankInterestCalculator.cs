@@ -7,10 +7,12 @@ namespace SavingRobotAdvisorApi.Service
     {
         public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
         {
+            decimal monthlyFallBelowFee = 2;
             decimal ruleMinimumSpend = 500;
             decimal ruleMinimumSalary = 2000;
             decimal interest = 0;
             decimal interestRate = 0;
+            int duration = 12;
 
             if(ruleMinimumSpend <= monthlyCreditCardSpendingAmount && ruleMinimumSalary <= monthlyIncome)
             {
@@ -37,7 +39,12 @@ namespace SavingRobotAdvisorApi.Service
                }
             }
 
-            if(initialDeposit > 0)
+            if(initialDeposit < 500)
+            {
+                interest -= monthlyFallBelowFee * duration;
+            }
+
+            if(initialDeposit > 0 && interest > 0)
             {
                 interestRate = interest/initialDeposit*100;
             }

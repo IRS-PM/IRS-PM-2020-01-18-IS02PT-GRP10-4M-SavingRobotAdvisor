@@ -14,11 +14,13 @@ namespace SavingRobotAdvisorApi.Service
 
             if(monthlyCreditCardSpendingAmount>=ruleMinimumSpend)
             {
-                decimal averageRebateRate = (10+10+5+3+3+3+3+3)/8;
+                decimal averageRebateRate = (10+5+3+3+0.30m)/5;
                 decimal monthlyRebate = monthlyCreditCardSpendingAmount * averageRebateRate/100;
-                if(monthlyRebate > 25 * 8)
+
+                //Monthly cash rebate for BOC Family principal card is capped at S$100.
+                if(monthlyRebate > 100)
                 {
-                    monthlyRebate = 25 * 8;
+                    monthlyRebate = 100;
                 }
                 rebate = monthlyRebate * duration;
             }

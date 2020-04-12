@@ -3,14 +3,23 @@ using SavingRobotAdvisorApi.Models;
 namespace SavingRobotAdvisorApi.Service
 {
     ///Interest Table: https://www.sc.com/sg/save/current-accounts/bonussaver/
+    //https://www.sc.com/sg/terms-and-conditions/bonusaver-product-terms/
     public class SCInterestCalculator : ICalculator<InterestResult>
     {
         public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
         {
+            decimal monthlyFallBelowFee = 5;
             decimal ruleMinimumSpend = 2000;
             decimal ruleMinimumSalary = 3000;
             decimal interest = 0;
             decimal interestRate = 0;
+            decimal duration = 12;
+            decimal baseInterestRate = 0.1m;
+
+            if(initialDeposit > 0)
+            {
+                interest += initialDeposit * baseInterestRate;
+            }
 
             if(ruleMinimumSpend <= monthlyCreditCardSpendingAmount && ruleMinimumSalary <= monthlyIncome)
             {
@@ -48,7 +57,12 @@ namespace SavingRobotAdvisorApi.Service
                }
             }
 
-            if(initialDeposit > 0)
+            if(initialDeposit < 3000)
+            {
+                interest -= monthlyFallBelowFee * duration;
+            }
+
+            if(initialDeposit > 0 && interest >0)
             {
                interestRate = interest/initialDeposit * 100;
             }            
