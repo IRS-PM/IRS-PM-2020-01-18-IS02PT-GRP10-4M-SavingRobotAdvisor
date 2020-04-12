@@ -30,7 +30,7 @@ namespace SavingRobotAdvisorApi.Service
                 decimal bonusInterestRate = 0.05m;
                 for(int i =0 ; i< duration; i++)
                 {
-                    interest += initialDeposit * bonusInterestRate;
+                    interest += initialDeposit * bonusInterestRate * 30/365/100;
                     if(bonusInterestRate<=0.6m)
                         bonusInterestRate += 0.05m;
                 }

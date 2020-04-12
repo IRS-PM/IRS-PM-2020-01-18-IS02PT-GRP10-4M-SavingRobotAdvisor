@@ -18,7 +18,7 @@ namespace SavingRobotAdvisorApi.Service
 
             if(initialDeposit > 0)
             {
-                interest += initialDeposit * baseInterestRate;
+                interest += initialDeposit * baseInterestRate /100;
             }
 
             if(ruleMinimumSpend <= monthlyCreditCardSpendingAmount && ruleMinimumSalary <= monthlyIncome)
