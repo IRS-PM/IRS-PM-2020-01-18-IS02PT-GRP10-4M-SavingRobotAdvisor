@@ -3,6 +3,7 @@ using SavingRobotAdvisorApi.Models;
 namespace SavingRobotAdvisorApi.Service
 {
     //Rebate Table: https://www.uob.com.sg/personal/cards/credit/one/
+    //https://www.uob.com.sg/assets/pdfs/one_card_full_tnc.pdf
     public class UOBCreditCardCalculator : ICalculator<RebateResult>
     {
         public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
@@ -19,7 +20,10 @@ namespace SavingRobotAdvisorApi.Service
             }
             else if(monthlyCreditCardSpendingAmount >= 1500)
             {
-                rebate = monthlyCreditCardSpendingAmount * 5.00m/100 * duration;
+                decimal monthlyRebateAmount = monthlyCreditCardSpendingAmount * 5.00m/100;
+                if(monthlyRebateAmount>100)
+                    monthlyRebateAmount = 100;
+                rebate =  monthlyRebateAmount * duration;
                 rebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
             }
 
