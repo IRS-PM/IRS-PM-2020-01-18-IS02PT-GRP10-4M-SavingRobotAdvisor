@@ -132,19 +132,7 @@ to choose the folder name 'SavingRobotAdvisorApi', which is the source code of d
    Request URL : http://localhost:5000/api/SavingRobotAdvisor
    Request Method: HTTP Get
    Request Content-Type: application/json
-   Request Body: 
-   "{\
-      "Income\":5000,
-      \"Balance\":10000,
-      \"MonthlySpending\":          
-                        {\"TotalAmount\":2000,    
-                        \"GroceryPercent\":0.35,
-                        \"DiningPercent\":0.25,
-                        \"PublicTransportPercent\":0.05,
-                        \"PetrolPercent\":0.2,
-                        \"TelcoPercent\":0.05,
-                        \"TravelPercent\":0.1}
-   }"
+   Request Body: "{\"Income\":5000,\"Balance\":10000,\"MonthlySpending\":{\"TotalAmount\":2000,\"GroceryPercent\":0.35,\"DiningPercent\":0.25,\"PublicTransportPercent\":0.05,\"PetrolPercent\":0.2,\"TelcoPercent\":0.05,\"TravelPercent\":0.1}}"
 6. The below sample response will be returned by web api:
 [{
   "bank": "UOB",
