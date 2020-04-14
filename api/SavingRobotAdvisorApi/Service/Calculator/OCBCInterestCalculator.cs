@@ -6,7 +6,7 @@ namespace SavingRobotAdvisorApi.Service
     //Charge: https://www.ocbc.com/assets/pdf/fees-and-charges-guide-personal-banking-products.pdf
     public class OCBCInterestCalculator : ICalculator<InterestResult>
     {
-        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             decimal monthlyFallBelowFee = 2;
             decimal ruleMinimumSpend = 500;
@@ -30,9 +30,9 @@ namespace SavingRobotAdvisorApi.Service
                }
             }
 
-            if (ruleMinimumSpend <= monthlyCreditCardSpendingAmount)
+            if (ruleMinimumSpend <= monthlySpending.TotalAmount)
             {
-                interest += (monthlyCreditCardSpendingAmount * 12) * 0.6m/100;
+                interest += (monthlySpending.TotalAmount * 12) * 0.6m/100;
             }
 
             if(initialDeposit < 3000)

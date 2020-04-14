@@ -6,7 +6,7 @@ namespace SavingRobotAdvisorApi.Service
     //https://www.citibank.com.sg/global_docs/pdf/MaxiGain_TC_2_Dec_2019.pdf
     public class CitibankInterestCalculator : ICalculator<InterestResult>
     {
-        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             decimal interest = 0;
             decimal interestRate = 0;

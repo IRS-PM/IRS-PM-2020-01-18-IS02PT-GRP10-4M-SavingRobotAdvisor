@@ -5,7 +5,7 @@ namespace SavingRobotAdvisorApi.Service
     ///Interest Table: https://www.uob.com.sg/personal/save/chequeing/one-account.page
     public class UOBInterestCalculator : ICalculator<InterestResult>
     {
-        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             decimal monthlyFallBelowFee = 2;
             decimal ruleMinimumSpend = 500;
@@ -14,7 +14,7 @@ namespace SavingRobotAdvisorApi.Service
             decimal interestRate = 0;
             int duration = 12;
 
-            if(ruleMinimumSpend <= monthlyCreditCardSpendingAmount && ruleMinimumSalary <= monthlyIncome)
+            if(ruleMinimumSpend <= monthlySpending.TotalAmount && ruleMinimumSalary <= monthlyIncome)
             {
                if (initialDeposit-75000>0)
                {
@@ -56,7 +56,7 @@ namespace SavingRobotAdvisorApi.Service
                    interest += initialDeposit * 1.25m/100;
                }
             }
-            else if (ruleMinimumSpend <= monthlyCreditCardSpendingAmount)
+            else if (ruleMinimumSpend <= monthlySpending.TotalAmount)
             {
                if (initialDeposit > 75000)
                {

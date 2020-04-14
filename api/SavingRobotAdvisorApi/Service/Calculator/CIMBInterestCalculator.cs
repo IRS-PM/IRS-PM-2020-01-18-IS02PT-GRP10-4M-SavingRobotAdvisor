@@ -6,7 +6,7 @@ namespace SavingRobotAdvisorApi.Service
     //Charges: https://www.cimbbank.com.sg/en/personal/support/help-and-support/rates-and-charges.html?c=fees-and-charges&n=accounts
     public class CIMBInterestCalculator : ICalculator<InterestResult>
     {
-        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             decimal interest = 0;
             decimal interestRate = 0;     

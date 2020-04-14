@@ -6,22 +6,24 @@ namespace SavingRobotAdvisorApi.Models
     {
         public decimal MonthlyIncome { get; set;}
         public decimal InitialDeposit {get; set;}
-        public decimal MonthlyCreditCardSpendingAmount {get; set;}
+        public MonthlySpending MonthlySpending {get; set;}
+
+
         public CreditCard(Bank bankName,
                              decimal monthlyIncome,
                              decimal initialDeposit,
-                             decimal monthlyCreditCardSpendingAmount,
+                             MonthlySpending monthlySpending,
                              ICalculator<RebateResult> rebateCalculator):base(rebateCalculator)
         {
             BankName = bankName;
             MonthlyIncome = monthlyIncome;
             InitialDeposit = initialDeposit;
-            MonthlyCreditCardSpendingAmount = monthlyCreditCardSpendingAmount;
+            MonthlySpending  = monthlySpending;
         }
 
         public override RebateResult Calculate()
         {
-            return Calculator.Calculate(MonthlyIncome, InitialDeposit, MonthlyCreditCardSpendingAmount);
+            return Calculator.Calculate(MonthlyIncome, InitialDeposit, MonthlySpending);
         }
     }
 }

@@ -6,25 +6,25 @@ namespace SavingRobotAdvisorApi.Service
     //https://www.uob.com.sg/assets/pdfs/one_card_full_tnc.pdf
     public class UOBCreditCardCalculator : ICalculator<RebateResult>
     {
-        public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             decimal ruleMinimumSpend = 500;
             decimal rebate = 0;
             decimal rebateRate = 0;
             int duration = 12;
 
-            if(monthlyCreditCardSpendingAmount >= ruleMinimumSpend && monthlyCreditCardSpendingAmount < 1500)
+            if(monthlySpending.TotalAmount >= ruleMinimumSpend && monthlySpending.TotalAmount < 1500)
             {
-                rebate = monthlyCreditCardSpendingAmount * 3.30m/100 * duration;
-                rebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
+                rebate = monthlySpending.TotalAmount * 3.30m/100 * duration;
+                rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
             }
-            else if(monthlyCreditCardSpendingAmount >= 1500)
+            else if(monthlySpending.TotalAmount >= 1500)
             {
-                decimal monthlyRebateAmount = monthlyCreditCardSpendingAmount * 5.00m/100;
+                decimal monthlyRebateAmount = monthlySpending.TotalAmount * 5.00m/100;
                 if(monthlyRebateAmount>100)
                     monthlyRebateAmount = 100;
                 rebate =  monthlyRebateAmount * duration;
-                rebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
+                rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
             }
 
             var result = new RebateResult();

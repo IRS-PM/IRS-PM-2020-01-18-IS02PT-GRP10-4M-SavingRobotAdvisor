@@ -6,7 +6,7 @@ namespace SavingRobotAdvisorApi.Service
     //https://www.ocbc.com/iwov-resources/sg/ocbc/personal/pdf/cards/365-terms-and-conditions-1-oct-2019.pdf
     public class OCBCCreditCardCalculator : ICalculator<RebateResult>
     {
-        public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             decimal ruleMinimumSpend = 800;
             decimal rebate = 0;
@@ -14,18 +14,18 @@ namespace SavingRobotAdvisorApi.Service
             int duration = 12;
             decimal averageRebateRate = (6m+3m+3m+3m+3m+3m+5m+0.3m)/8;
 
-            if(monthlyCreditCardSpendingAmount>=ruleMinimumSpend)
+            if(monthlySpending.TotalAmount>=ruleMinimumSpend)
             {   
-                decimal monthlyRebateAmount = monthlyCreditCardSpendingAmount * averageRebateRate/100;
+                decimal monthlyRebateAmount = monthlySpending.TotalAmount * averageRebateRate/100;
                 if(monthlyRebateAmount > 80)
                     monthlyRebateAmount = 80;
                 rebate = monthlyRebateAmount * duration;
-                rebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
+                rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
             }
-            else if(monthlyCreditCardSpendingAmount > 0 && monthlyCreditCardSpendingAmount < ruleMinimumSpend)
+            else if(monthlySpending.TotalAmount > 0 && monthlySpending.TotalAmount < ruleMinimumSpend)
             {
-                rebate = monthlyCreditCardSpendingAmount * duration * 0.03m/100;
-                rebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
+                rebate = monthlySpending.TotalAmount * duration * 0.03m/100;
+                rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
             }
 
             var result = new RebateResult();

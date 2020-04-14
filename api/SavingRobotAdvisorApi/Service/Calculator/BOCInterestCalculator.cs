@@ -6,7 +6,7 @@ namespace SavingRobotAdvisorApi.Service
     ///Prevailing Interest: https://www.bankofchina.com/sg/bocinfo/bi3/201002/t20100207_961728.html
     public class BOCInterestCalculator : ICalculator<InterestResult>
     {
-        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             #region Local Variables
             decimal monthlyFallBelowFee = 3;
@@ -60,7 +60,7 @@ namespace SavingRobotAdvisorApi.Service
             if (initialDeposit >= 1500)
             {
                 //Card Spend Bonus Interest
-                if (ruleMinimumSpend <= monthlyCreditCardSpendingAmount && monthlyCreditCardSpendingAmount < ruleMaximumSpend)
+                if (ruleMinimumSpend <= monthlySpending.TotalAmount && monthlySpending.TotalAmount < ruleMaximumSpend)
                 {
                     if (initialDeposit > 0 && initialDeposit < 60000)
                         interest += initialDeposit * 0.80m / 100;
@@ -71,7 +71,7 @@ namespace SavingRobotAdvisorApi.Service
                     }
 
                 }
-                else if (monthlyCreditCardSpendingAmount > ruleMaximumSpend)
+                else if (monthlySpending.TotalAmount > ruleMaximumSpend)
                 {
                     if (initialDeposit > 0 && initialDeposit < 60000)
                         interest += initialDeposit * 1.60m / 100;

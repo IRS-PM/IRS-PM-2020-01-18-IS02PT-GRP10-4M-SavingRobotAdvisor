@@ -6,7 +6,7 @@ namespace SavingRobotAdvisorApi.Service
     //https://www.posb.com.sg/iwov-resources/pdf/cards/credit-cards/everydaycard_tnc.pdf
     public class DBSCreditCardCalculator : ICalculator<RebateResult>
     {
-        public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             decimal ruleMinimumSpend = 0;
             decimal rebate = 0;
@@ -14,13 +14,13 @@ namespace SavingRobotAdvisorApi.Service
             int duration = 12;
             decimal averageRebateRate = (5m+1m+0.3m)/3;
 
-            if(ruleMinimumSpend < monthlyCreditCardSpendingAmount)
+            if(ruleMinimumSpend < monthlySpending.TotalAmount)
             {
-                decimal monthlyRebateAmount = monthlyCreditCardSpendingAmount * averageRebateRate/100;
+                decimal monthlyRebateAmount = monthlySpending.TotalAmount * averageRebateRate/100;
                 if(monthlyRebateAmount>50)
                     monthlyRebateAmount = 50;
                 rebate = monthlyRebateAmount*duration;
-                rebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
+                rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
             }
 
             var result = new RebateResult();

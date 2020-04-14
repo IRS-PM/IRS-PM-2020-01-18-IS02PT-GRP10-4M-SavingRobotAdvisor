@@ -6,7 +6,7 @@ namespace SavingRobotAdvisorApi.Service
     //https://www.sc.com/sg/terms-and-conditions/bonusaver-product-terms/
     public class SCInterestCalculator : ICalculator<InterestResult>
     {
-        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             decimal monthlyFallBelowFee = 5;
             decimal ruleMinimumSpend = 2000;
@@ -21,7 +21,7 @@ namespace SavingRobotAdvisorApi.Service
                 interest += initialDeposit * baseInterestRate /100;
             }
 
-            if(ruleMinimumSpend <= monthlyCreditCardSpendingAmount && ruleMinimumSalary <= monthlyIncome)
+            if(ruleMinimumSpend <= monthlySpending.TotalAmount && ruleMinimumSalary <= monthlyIncome)
             {
                if (initialDeposit <= 100000 && initialDeposit > 0)
                {
@@ -35,11 +35,11 @@ namespace SavingRobotAdvisorApi.Service
                    interest += (initialDeposit - 100000) * 0.05m/100;
                }
             }
-            else if (monthlyCreditCardSpendingAmount < ruleMinimumSpend && ruleMinimumSalary <= monthlyIncome)
+            else if (monthlySpending.TotalAmount < ruleMinimumSpend && ruleMinimumSalary <= monthlyIncome)
             {
                if (initialDeposit <= 100000 && initialDeposit > 0)
                {
-                   if(monthlyCreditCardSpendingAmount >= 500)
+                   if(monthlySpending.TotalAmount >= 500)
                    {
                      interest += initialDeposit* 0.88m/100;
                    }
@@ -48,7 +48,7 @@ namespace SavingRobotAdvisorApi.Service
                }
                else if ( initialDeposit > 100000)
                {
-                   if(monthlyCreditCardSpendingAmount >= 500)
+                   if(monthlySpending.TotalAmount >= 500)
                    {
                      interest += 100000* 0.88m/100;
                    }

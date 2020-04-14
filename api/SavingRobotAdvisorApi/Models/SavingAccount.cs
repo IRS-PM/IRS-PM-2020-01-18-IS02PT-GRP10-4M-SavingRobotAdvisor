@@ -4,24 +4,24 @@ namespace SavingRobotAdvisorApi.Models
 {
     public class SavingAccount : Account<InterestResult>
     {
-        public decimal MonthlyIncome { get; set;}
-        public decimal InitialDeposit {get; set;}
-        public decimal MonthlyCreditCardSpendingAmount {get; set;}
+        public decimal MonthlyIncome { get; set; }
+        public decimal InitialDeposit { get; set; }
+        public MonthlySpending MonthlySpending { get; set; }
         public SavingAccount(Bank bankName,
                              decimal monthlyIncome,
                              decimal initialDeposit,
-                             decimal monthlyCreditCardSpendingAmount,
-                             ICalculator<InterestResult> interestCalculator):base(interestCalculator)
+                             MonthlySpending monthlySpending,
+                             ICalculator<InterestResult> interestCalculator) : base(interestCalculator)
         {
             BankName = bankName;
             MonthlyIncome = monthlyIncome;
             InitialDeposit = initialDeposit;
-            MonthlyCreditCardSpendingAmount = monthlyCreditCardSpendingAmount;
+            MonthlySpending = monthlySpending;
         }
 
         public override InterestResult Calculate()
         {
-            return Calculator.Calculate(MonthlyIncome, InitialDeposit, MonthlyCreditCardSpendingAmount);
+            return Calculator.Calculate(MonthlyIncome, InitialDeposit, MonthlySpending);
         }
     }
 }
