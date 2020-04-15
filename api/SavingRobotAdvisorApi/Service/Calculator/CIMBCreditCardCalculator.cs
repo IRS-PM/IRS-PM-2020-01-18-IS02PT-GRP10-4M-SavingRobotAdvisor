@@ -6,28 +6,28 @@ namespace SavingRobotAdvisorApi.Service
     //https://www.cimbbank.com.sg/content/dam/cimbsingapore/personal/cards/terms-and-conditions/tnc-vs-card.pdf
     public class CIMBCreditCardCalculator : ICalculator<RebateResult>
     {
-        public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             decimal ruleMinimumSpend = 800;
             decimal rebate = 0;
             decimal rebateRate = 0;
             int duration = 12;
 
-            if(monthlyCreditCardSpendingAmount > ruleMinimumSpend)
+            if(monthlySpending.TotalAmount > ruleMinimumSpend)
             {
-                decimal monthlyRebate = monthlyCreditCardSpendingAmount * 10.00m/100;
+                decimal monthlyRebate = monthlySpending.TotalAmount * 10.00m/100;
                 if(monthlyRebate>100)
                     monthlyRebate = 100;
                 rebate = monthlyRebate * duration;
             }
-            else if(monthlyCreditCardSpendingAmount >= 0)
+            else if(monthlySpending.TotalAmount >= 0 && monthlySpending.TotalAmount < ruleMinimumSpend)
             {
-                rebate = monthlyCreditCardSpendingAmount * 0.20m/100 * duration;
+                rebate = monthlySpending.TotalAmount * 0.20m/100 * duration;
             }
 
-            if(monthlyCreditCardSpendingAmount > 0)
+            if(monthlySpending.TotalAmount > 0)
             {
-                rebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
+                rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
             }
 
             var result = new RebateResult();

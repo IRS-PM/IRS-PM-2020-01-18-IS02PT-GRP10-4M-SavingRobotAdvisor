@@ -5,12 +5,14 @@ namespace SavingRobotAdvisorApi.Service
     ///Interest Table: https://www.dbs.com.sg/personal/rates-online/multiplier-account.page
     public class DBSInterestCalculator : ICalculator<InterestResult>
     {
-        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
+            decimal monthlyFallBelowFee = 5;
             decimal ruleMinimumTransaction = 2000;
-            decimal currentTransaction = monthlyIncome + monthlyCreditCardSpendingAmount;
+            decimal currentTransaction = monthlyIncome + monthlySpending.TotalAmount;
             decimal interest = 0;
             decimal interestRate = 0;
+            int duration = 12;
 
             if(currentTransaction < ruleMinimumTransaction)
             {
@@ -77,7 +79,12 @@ namespace SavingRobotAdvisorApi.Service
                 }
             }
 
-            if(initialDeposit>0)
+            if(initialDeposit<3000)
+            {
+                interest -= monthlyFallBelowFee * duration;
+            }
+
+            if(initialDeposit>0 && interest > 0)
             {
                 interestRate = interest/initialDeposit*100;
             }

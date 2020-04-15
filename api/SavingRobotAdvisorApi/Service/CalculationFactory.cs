@@ -10,27 +10,28 @@ namespace SavingRobotAdvisorApi.Service
         public static CalculationResult GetCalculationResult(Bank bankName, 
                                                         decimal monthlyIncome,
                                                         decimal initialDeposit,
-                                                        decimal monthlyCreditCardSpendingAmount)
+                                                        MonthlySpending monthlySpending)
         {
             CalculationResult calculationResult = new CalculationResult();
             decimal totalSavingAmount = 0;
 
-            if(bankName != Bank.Unkonwn)
-            {
-                var interestCalculator = (ICalculator<InterestResult>)Activator.CreateInstance(Type.GetType("SavingRobotAdvisorApi.Service." + Enum.GetName(typeof(Bank), bankName) + "InterestCalculator"));
-                SavingAccount savingAccount = new SavingAccount(bankName, monthlyIncome, initialDeposit, monthlyCreditCardSpendingAmount, interestCalculator);
-                InterestResult saving = savingAccount.Calculate();
-
-                var rebateCalculator = (ICalculator<RebateResult>)Activator.CreateInstance(Type.GetType("SavingRobotAdvisorApi.Service." + Enum.GetName(typeof(Bank), bankName) + "CreditCardCalculator"));
-                CreditCard creditCardAccount = new CreditCard(bankName, monthlyIncome, initialDeposit, monthlyCreditCardSpendingAmount, rebateCalculator);
-                RebateResult rebate = creditCardAccount.Calculate();
-                totalSavingAmount = saving.InterestAmount + rebate.RebateAmount;
-                calculationResult.CombineCalculationResult(bankName, saving, rebate, totalSavingAmount);
-            }
-            else
+            if(initialDeposit < 0 || monthlyIncome < 0 || monthlySpending == null 
+            || (initialDeposit == 0 && monthlyIncome == 0 && monthlySpending == null)
+            || (initialDeposit == 0 && monthlyIncome >0 && monthlySpending == null)
+            || bankName == Bank.Unkonwn)
             {
                 calculationResult.CombineCalculationResult(bankName, null, null, totalSavingAmount);
             }
+
+            var interestCalculator = (ICalculator<InterestResult>)Activator.CreateInstance(Type.GetType("SavingRobotAdvisorApi.Service." + Enum.GetName(typeof(Bank), bankName) + "InterestCalculator"));
+            SavingAccount savingAccount = new SavingAccount(bankName, monthlyIncome, initialDeposit, monthlySpending, interestCalculator);
+            InterestResult saving = savingAccount.Calculate();
+
+            var rebateCalculator = (ICalculator<RebateResult>)Activator.CreateInstance(Type.GetType("SavingRobotAdvisorApi.Service." + Enum.GetName(typeof(Bank), bankName) + "CreditCardCalculator"));
+            CreditCard creditCardAccount = new CreditCard(bankName, monthlyIncome, initialDeposit, monthlySpending, rebateCalculator);
+            RebateResult rebate = creditCardAccount.Calculate();
+            totalSavingAmount = saving.InterestAmount + rebate.RebateAmount;
+            calculationResult.CombineCalculationResult(bankName, saving, rebate, totalSavingAmount);
 
             return calculationResult;
         }

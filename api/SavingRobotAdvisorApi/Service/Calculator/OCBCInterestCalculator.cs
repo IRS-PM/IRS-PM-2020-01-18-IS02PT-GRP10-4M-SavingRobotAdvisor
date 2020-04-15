@@ -3,13 +3,17 @@ using SavingRobotAdvisorApi.Models;
 namespace SavingRobotAdvisorApi.Service
 {
     ///Calculation Table: https://www.ocbc.com/personal-banking/deposits/360-savings-account
+    //Charge: https://www.ocbc.com/assets/pdf/fees-and-charges-guide-personal-banking-products.pdf
     public class OCBCInterestCalculator : ICalculator<InterestResult>
     {
-        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
+            decimal monthlyFallBelowFee = 2;
             decimal ruleMinimumSpend = 500;
             decimal ruleMinimumSalary = 2000;
             decimal interest = 0;
+            decimal interestRate = 0;
+            int duration = 12;
 
             if(ruleMinimumSalary <= monthlyIncome)
             {
@@ -26,14 +30,24 @@ namespace SavingRobotAdvisorApi.Service
                }
             }
 
-            if (ruleMinimumSpend <= monthlyCreditCardSpendingAmount)
+            if (ruleMinimumSpend <= monthlySpending.TotalAmount)
             {
-                interest += (monthlyCreditCardSpendingAmount * 12) * 0.6m/100;
+                interest += (monthlySpending.TotalAmount * 12) * 0.6m/100;
+            }
+
+            if(initialDeposit < 3000)
+            {
+                interest -= monthlyFallBelowFee * duration;
+            }
+
+            if(initialDeposit > 0 && interest > 0)
+            {
+                interestRate = interest/initialDeposit*100;
             }
 
             var result = new InterestResult();
             result.InterestAmount = interest;
-            result.InterestRate = interest/initialDeposit*100;
+            result.InterestRate = interestRate;
 
             return result;
         }

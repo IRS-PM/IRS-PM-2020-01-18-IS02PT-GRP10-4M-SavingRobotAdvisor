@@ -5,28 +5,28 @@ namespace SavingRobotAdvisorApi.Service
     //Rebate Table: https://www.citibank.com.sg/gcb/credit_cards/dividend-card.htm
     public class CitibankCreditCardCalculator : ICalculator<RebateResult>
     {
-        public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
             decimal ruleMinimumSpend = 888;
             decimal rebate = 0;
             decimal rebateRate = 0;
             int duration = 12;
 
-            if(monthlyCreditCardSpendingAmount>=ruleMinimumSpend)
+            if(monthlySpending.TotalAmount>=ruleMinimumSpend)
             {
-                decimal monthlyRebate = monthlyCreditCardSpendingAmount * 7.75m/100;
+                decimal monthlyRebate = monthlySpending.TotalAmount * 7.75m/100;
                 if(monthlyRebate > 75)
                     monthlyRebate = 75;
                 rebate =  monthlyRebate * duration;
             }
-            else if(monthlyCreditCardSpendingAmount > 0)
+            else if(monthlySpending.TotalAmount > 0 && monthlySpending.TotalAmount < ruleMinimumSpend)
             {
-                rebate = monthlyCreditCardSpendingAmount * 0.20m/100 * duration;
+                rebate = monthlySpending.TotalAmount * 0.20m/100 * duration;
             }
 
-            if(monthlyCreditCardSpendingAmount > 0)
+            if(monthlySpending.TotalAmount > 0)
             {
-                rebateRate = rebate/(monthlyCreditCardSpendingAmount*duration)*100;
+                rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
             }
 
             var result = new RebateResult();

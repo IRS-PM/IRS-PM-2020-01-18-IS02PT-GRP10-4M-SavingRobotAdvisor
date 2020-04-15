@@ -5,14 +5,16 @@ namespace SavingRobotAdvisorApi.Service
     ///Interest Table: https://www.maybank2u.com.sg/en/personal/saveup/save-up-programme.page
     public class MaybankInterestCalculator : ICalculator<InterestResult>
     {
-        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, decimal monthlyCreditCardSpendingAmount)
+        public InterestResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
+            decimal monthlyFallBelowFee = 2;
             decimal ruleMinimumSpend = 500;
             decimal ruleMinimumSalary = 2000;
             decimal interest = 0;
             decimal interestRate = 0;
+            int duration = 12;
 
-            if(ruleMinimumSpend <= monthlyCreditCardSpendingAmount && ruleMinimumSalary <= monthlyIncome)
+            if(ruleMinimumSpend <= monthlySpending.TotalAmount && ruleMinimumSalary <= monthlyIncome)
             {
                if (initialDeposit>50000)
                {
@@ -24,7 +26,7 @@ namespace SavingRobotAdvisorApi.Service
                     interest += initialDeposit * 0.3125m/100;
                }
             }
-            else if ((ruleMinimumSpend > monthlyCreditCardSpendingAmount && monthlyCreditCardSpendingAmount > 0) || (ruleMinimumSalary > monthlyIncome && monthlyIncome > 0))
+            else if ((ruleMinimumSpend > monthlySpending.TotalAmount && monthlySpending.TotalAmount > 0) || (ruleMinimumSalary > monthlyIncome && monthlyIncome > 0))
             {
                 if (initialDeposit>3700 && initialDeposit <=50000)
                {
@@ -37,7 +39,12 @@ namespace SavingRobotAdvisorApi.Service
                }
             }
 
-            if(initialDeposit > 0)
+            if(initialDeposit < 500)
+            {
+                interest -= monthlyFallBelowFee * duration;
+            }
+
+            if(initialDeposit > 0 && interest > 0)
             {
                 interestRate = interest/initialDeposit*100;
             }
