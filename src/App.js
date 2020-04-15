@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -10,7 +10,16 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import {AccountBalance, CreditCard, Launch, MonetizationOn} from "@material-ui/icons";
+import {
+    AccountBalance,
+    CreditCard, FlightTakeoff,
+    Launch,
+    LocalDining,
+    LocalGasStation,
+    MonetizationOn, PhoneAndroid,
+    ShoppingCart,
+    Train
+} from "@material-ui/icons";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Card from '@material-ui/core/Card';
@@ -18,8 +27,12 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
+import Slider from "@material-ui/core/Slider";
+import Input from "@material-ui/core/Input";
 
 const drawerWidth = 275;
+const apiServer = "gvinto.synology.me:32786";
+//const apiServer = "localhost:5000";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -46,6 +59,10 @@ const useStyles = makeStyles(theme => ({
         },
     },
     toolbar: theme.mixins.toolbar,
+    container: {
+        width: drawerWidth-30,
+        marginLeft: 15,
+    },
     drawerPaper: {
         width: drawerWidth,
     },
@@ -67,6 +84,10 @@ const useStyles = makeStyles(theme => ({
     pos: {
         fontSize: 11,
         marginBottom: 14,
+    },
+    input: {
+        width: 52,
+        textAlign:'right',
     },
 }));
 
@@ -141,18 +162,29 @@ export function SimpleCard(props) {
 }
 
 function ResponsiveDrawer(props) {
-    const [income, setIncome] = React.useState('');
-    const [expense, setExpense] = React.useState('');
-    const [savings, setSavings] = React.useState('');
+    const [income, setIncome] = React.useState(3500);
+    const [expense, setExpense] = React.useState(1000);
+    const [savings, setSavings] = React.useState(30000);
     const [results, setResults] = React.useState(initialList);
     const [incomeError, setIncomeError] = React.useState('');
     const [expenseError, setExpenseError] = React.useState('');
     const [savingsError, setSavingsError] = React.useState('');
+    const [groceryValue, setGroceryValue] = React.useState(30/100*expense);
+    const [diningValue, setDiningValue] = React.useState(25/100*expense);
+    const [publicTransportValue, setPublicTransportValue] = React.useState(5/100*expense);
+    const [petrolValue, setPetrolValue] = React.useState(20/100*expense);
+    const [telcoValue, setTelcoValue] = React.useState(5/100*expense);
+    const [travelValue, setTravelValue] = React.useState(10/100*expense);
+
 
     const {container} = props;
     const classes = useStyles();
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
+
+    useEffect(() => {
+        document.title = "Savings Robot Advisor"
+    }, []);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -164,15 +196,7 @@ function ResponsiveDrawer(props) {
         } else {
             setIncomeError("true");
         }
-        setIncome(event.target.value);
-    };
-    const handleExpenseChange = event => {
-        if (event.target.value.length > 0 && event.target.value >= 0) {
-            setExpenseError("");
-        } else {
-            setExpenseError("true");
-        }
-        setExpense(event.target.value);
+        setIncome(event.target.value === '' ? '' : Number(event.target.value));
     };
     const handleSavingsChange = event => {
         if (event.target.value.length > 0 && event.target.value >= 0) {
@@ -180,13 +204,136 @@ function ResponsiveDrawer(props) {
         } else {
             setSavingsError("true");
         }
-        setSavings(event.target.value);
+        setSavings(event.target.value === '' ? '' : Number(event.target.value));
     };
+    const handleExpenseChange = event => {
+        if (event.target.value.length > 0 && event.target.value >= 0) {
+            setExpenseError("");
+        } else {
+            setExpenseError("true");
+        }
+        setExpense(event.target.value === '' ? '' : Number(event.target.value));
+        if (Number(event.target.value) < groceryValue+diningValue+publicTransportValue+petrolValue+telcoValue+travelValue) {
+            setGroceryValue(0);
+            setDiningValue(0);
+            setPublicTransportValue(0);
+            setPetrolValue(0);
+            setTelcoValue(0);
+            setTravelValue(0);
+        }
+    };
+
+    const handleGrocerySliderChange = (event, newValue) => {
+        if((newValue/100*expense)+diningValue+publicTransportValue+petrolValue+telcoValue+travelValue <= expense) {
+            setGroceryValue(Math.round(newValue / 100 * expense));
+        }
+    };
+    const handleGroceryInputChange = (event) => {
+        if (event.target.value < 0) {
+            setGroceryValue(0);
+        } else if (Number(event.target.value)+diningValue+publicTransportValue+petrolValue+telcoValue+travelValue > expense) {
+            setGroceryValue(expense-(diningValue+publicTransportValue+petrolValue+telcoValue+travelValue));
+        } else {
+            setGroceryValue(event.target.value === '' ? '' : Number(event.target.value));
+        }
+    };
+
+    const handleDiningSliderChange = (event, newValue) => {
+        if(groceryValue+(newValue/100*expense)+publicTransportValue+petrolValue+telcoValue+travelValue <= expense) {
+            setDiningValue(Math.round(newValue / 100 * expense));
+        }
+    };
+    const handleDiningInputChange = (event) => {
+        if (event.target.value < 0) {
+            setDiningValue(0);
+        } else if (groceryValue+Number(event.target.value)+publicTransportValue+petrolValue+telcoValue+travelValue > expense) {
+            setDiningValue(expense-(groceryValue+publicTransportValue+petrolValue+telcoValue+travelValue));
+        } else {
+            setDiningValue(event.target.value === '' ? '' : Number(event.target.value));
+        }
+    };
+
+    const handlePublicTransportSliderChange = (event, newValue) => {
+        if(groceryValue+diningValue+(newValue/100*expense)+petrolValue+telcoValue+travelValue <= expense) {
+            setPublicTransportValue(Math.round(newValue/100*expense));
+        }
+    };
+    const handlePublicTransportInputChange = (event) => {
+        if (event.target.value < 0) {
+            setPublicTransportValue(0);
+        } else if (groceryValue+diningValue+Number(event.target.value)+petrolValue+telcoValue+travelValue > expense) {
+            setPublicTransportValue(expense-(groceryValue+diningValue+petrolValue+telcoValue+travelValue));
+        } else {
+            setPublicTransportValue(event.target.value === '' ? '' : Number(event.target.value));
+        }
+    };
+
+    const handlePetrolSliderChange = (event, newValue) => {
+        if(groceryValue+diningValue+publicTransportValue+(newValue/100*expense)+telcoValue+travelValue <= expense) {
+            setPetrolValue(Math.round(newValue / 100 * expense));
+        }
+    };
+    const handlePetrolInputChange = (event) => {
+        if (event.target.value < 0) {
+            setPetrolValue(0);
+        } else if (groceryValue+diningValue+publicTransportValue+Number(event.target.value)+telcoValue+travelValue > expense) {
+            setPetrolValue(expense-(groceryValue+diningValue+publicTransportValue+telcoValue+travelValue));
+        } else {
+            setPetrolValue(event.target.value === '' ? '' : Number(event.target.value));
+        }
+    };
+
+    const handleTelcoSliderChange = (event, newValue) => {
+        if(groceryValue+diningValue+publicTransportValue+petrolValue+(newValue/100*expense)+travelValue <= expense) {
+            setTelcoValue(Math.round(newValue / 100 * expense));
+        }
+    };
+    const handleTelcoInputChange = (event) => {
+        if (event.target.value < 0) {
+            setTelcoValue(0);
+        } else if (groceryValue+diningValue+publicTransportValue+petrolValue+Number(event.target.value)+travelValue > expense) {
+            setTelcoValue(expense-(groceryValue+diningValue+publicTransportValue+petrolValue+travelValue));
+        } else {
+            setTelcoValue(event.target.value === '' ? '' : Number(event.target.value));
+        }
+    };
+
+    const handleTravelSliderChange = (event, newValue) => {
+        if(groceryValue+diningValue+publicTransportValue+petrolValue+telcoValue+(newValue/100*expense) <= expense) {
+            setTravelValue(Math.round(newValue / 100 * expense));
+        }
+    };
+    const handleTravelInputChange = (event) => {
+        if (event.target.value < 0) {
+            setTravelValue(0);
+        } else if (groceryValue+diningValue+publicTransportValue+petrolValue+telcoValue+Number(event.target.value) > expense) {
+            setTravelValue(expense-(groceryValue+diningValue+publicTransportValue+petrolValue+telcoValue));
+        } else {
+            setTravelValue(event.target.value === '' ? '' : Number(event.target.value));
+        }
+    };
+
     const compareButtonClick = event => {
         if (income && expense && savings && income >= 0 && expense >= 0 && savings >= 0) {
-            fetch('http://localhost:5000/api/SavingRobotAdvisor/?income='+income+'&balance='+savings+'&spending='+expense)
+            fetch('http://'+apiServer+'/api/SavingRobotAdvisor', {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify("{\"Income\":"+income+
+                                            ",\"Balance\":"+savings+
+                                            ",\"MonthlySpending\":{\"TotalAmount\":"+expense+
+                                                                ",\"GroceryPercent\":"+groceryValue/expense*100+
+                                                                ",\"DiningPercent\":"+diningValue/expense*100+
+                                                                ",\"PublicTransportPercent\":"+publicTransportValue/expense*100+
+                                                                ",\"PetrolPercent\":"+petrolValue/expense*100+
+                                                                ",\"TelcoPercent\":"+telcoValue/expense*100+
+                                                                ",\"TravelPercent\":"+travelValue/expense*100+"}}"),
+                credentials: "same-origin"
+            })
                 .then(res => res.json())
                 .then((data) => {
+                    console.log(data);
                     data.sort((a, b) => (a.interest + a.rebate > b.interest + b.rebate) ? -1 : 1);
                     const results = data.map(processResult);
                     console.log(results);
@@ -210,19 +357,19 @@ function ResponsiveDrawer(props) {
 
     const drawer = (
 
-        <form className={classes.form} onSubmit={compareButtonClick} autoComplete="off">
+        <div className={classes.drawerPaper}>
             <Grid
                 container
-                spacing={16}
-                direction="column"
-                alignItems="center"
+                spacing={1}
+                direction="row"
+                alignItems="stretch"
                 justify="center"
                 className={classes.container}
             >
                 <Grid item xs={12}>
                     <TextField
                         required
-                        id="income"
+                        id="incomeText"
                         label="Monthly net income"
                         margin={"normal"}
                         variant="outlined"
@@ -238,29 +385,11 @@ function ResponsiveDrawer(props) {
                         onChange={handleIncomeChange}
                     />
                 </Grid>
+
                 <Grid item xs={12}>
                     <TextField
                         required
-                        id="expenses"
-                        label="Monthly credit card expenses"
-                        margin={"normal"}
-                        variant="outlined"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <CreditCard/>
-                                </InputAdornment>
-                            ),
-                        }}
-                        error={expenseError}
-                        value={expense}
-                        onChange={handleExpenseChange}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        required
-                        id="savings"
+                        id="savingsText"
                         label="Cash Savings"
                         margin={"normal"}
                         variant="outlined"
@@ -277,12 +406,189 @@ function ResponsiveDrawer(props) {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <Button onClick={compareButtonClick} variant="contained" color="primary">
+                    <TextField
+                        required
+                        id="expensesText"
+                        label="Monthly credit card expenses"
+                        margin={"normal"}
+                        variant="outlined"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <CreditCard/>
+                                </InputAdornment>
+                            ),
+                        }}
+                        error={expenseError}
+                        value={expense}
+                        onChange={handleExpenseChange}
+                    />
+                </Grid>
+
+                <Grid item xs={2}>
+                    <ShoppingCart/>
+                </Grid>
+                <Grid item xs={10}>
+                    <Slider
+                        value={typeof groceryValue === 'number' ? groceryValue/expense*100 : 0}
+                        onChange={handleGrocerySliderChange}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    {Math.round(groceryValue/expense*100)}%
+                </Grid>
+                <Grid item xs={5} >
+                        Grocery
+                </Grid>
+                <Grid item xs={4} >
+                    $<Input
+                        className={classes.input}
+                        value={groceryValue}
+                        margin="dense"
+                        onChange={handleGroceryInputChange}
+                    />
+
+                </Grid>
+
+                <Grid item xs={2}>
+                    <LocalDining/>
+                </Grid>
+                <Grid item xs={10}>
+                    <Slider
+                        value={typeof diningValue === 'number' ? diningValue/expense*100 : 0}
+                        onChange={handleDiningSliderChange}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    {Math.round(diningValue/expense*100)}%
+                </Grid>
+                <Grid item xs={5} >
+                    Dining
+                </Grid>
+                <Grid item xs={4} >
+                    $<Input
+                    className={classes.input}
+                    value={diningValue}
+                    margin="dense"
+                    onChange={handleDiningInputChange}
+                />
+                </Grid>
+
+                <Grid item xs={2}>
+                    <Train/>
+                </Grid>
+                <Grid item xs={10}>
+                    <Slider
+                        value={typeof publicTransportValue === 'number' ? publicTransportValue/expense*100 : 0}
+                        onChange={handlePublicTransportSliderChange}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    {Math.round(publicTransportValue/expense*100)}%
+                </Grid>
+                <Grid item xs={5} >
+                    Transport
+                </Grid>
+                <Grid item xs={4} >
+                    $<Input
+                    className={classes.input}
+                    value={publicTransportValue}
+                    margin="dense"
+                    onChange={handlePublicTransportInputChange}
+                />
+                </Grid>
+
+                <Grid item xs={2}>
+                    <LocalGasStation/>
+                </Grid>
+                <Grid item xs={10}>
+                    <Slider
+                        value={typeof petrolValue === 'number' ? petrolValue/expense*100 : 0}
+                        onChange={handlePetrolSliderChange}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    {Math.round(petrolValue/expense*100)}%
+                </Grid>
+                <Grid item xs={5} >
+                    Petrol
+                </Grid>
+                <Grid item xs={4} >
+                    $<Input
+                    className={classes.input}
+                    value={petrolValue}
+                    margin="dense"
+                    onChange={handlePetrolInputChange}
+                />
+                </Grid>
+
+                <Grid item xs={2}>
+                    <PhoneAndroid/>
+                </Grid>
+                <Grid item xs={10}>
+                    <Slider
+                        value={typeof telcoValue === 'number' ? telcoValue/expense*100 : 0}
+                        onChange={handleTelcoSliderChange}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    {Math.round(telcoValue/expense*100)}%
+                </Grid>
+                <Grid item xs={5} >
+                    Telco
+                </Grid>
+                <Grid item xs={4} >
+                    $<Input
+                    className={classes.input}
+                    value={telcoValue}
+                    margin="dense"
+                    onChange={handleTelcoInputChange}
+                />
+                </Grid>
+
+                <Grid item xs={2}>
+                    <FlightTakeoff/>
+                </Grid>
+                <Grid item xs={10}>
+                    <Slider
+                        value={typeof travelValue === 'number' ? travelValue/expense*100 : 0}
+                        onChange={handleTravelSliderChange}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    {Math.round(travelValue/expense*100)}%
+                </Grid>
+                <Grid item xs={5} >
+                    Travel
+                </Grid>
+                <Grid item xs={4} >
+                    $<Input
+                    className={classes.input}
+                    value={travelValue}
+                    margin="dense"
+                    onChange={handleTravelInputChange}
+                />
+                </Grid>
+
+
+                <Grid item xs={3} >
+                    {Math.round((expense-(groceryValue+diningValue+publicTransportValue+petrolValue+telcoValue+travelValue))/expense*100)}%
+                </Grid>
+                <Grid item xs={5} >
+                    Others
+                </Grid>
+                <Grid item xs={4} >
+                    ${Math.round(expense-(groceryValue+diningValue+publicTransportValue+petrolValue+telcoValue+travelValue))}
+                </Grid>
+
+
+                <Grid item xs={12}>
+                    <Button onClick={compareButtonClick} variant="contained" fullWidth={true} color="primary">
                         Compare Banks
                     </Button>
                 </Grid>
             </Grid>
-        </form>
+        </div>
 
     );
 
@@ -338,17 +644,26 @@ function ResponsiveDrawer(props) {
             </nav>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
+                <img width='600' alt='Savings Robot Advisor logo ' src={process.env.PUBLIC_URL + 'Logo_Text.png'} />
                 <Typography paragraph>
                     Our robot advisor will help you pick the savings account and credit card with the
                     <ul>
                         <li>Highest annual interest on your savings</li>
                         <li>Best credit card rebate</li>
                     </ul>
-                    You just need to state in the left column your:
+                    Please enter in the left column your:
                     <ul>
                         <li>Monthly net salary</li>
-                        <li>Monthly credit card expenses</li>
                         <li>Current cash savings</li>
+                        <li>Monthly credit card expenses on:</li>
+                        <ul>
+                            <li>Groceries</li>
+                            <li>Dining</li>
+                            <li>Public Transport</li>
+                            <li>Petrol</li>
+                            <li>Telco bills</li>
+                            <li>Travel</li>
+                        </ul>
                     </ul>
                 </Typography>
 

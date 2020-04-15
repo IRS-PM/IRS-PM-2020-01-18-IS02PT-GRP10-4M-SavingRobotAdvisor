@@ -43,7 +43,7 @@ namespace SavingRobotAdvisorApi
             }
 
             app.UseCors(
-                options => options.WithOrigins("http://localhost:3000")
+                options => options.WithOrigins("http://localhost:3000","http://gvinto.synology.me:3000")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
             );
