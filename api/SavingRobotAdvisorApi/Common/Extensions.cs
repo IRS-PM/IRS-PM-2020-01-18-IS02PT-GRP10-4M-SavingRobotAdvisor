@@ -22,6 +22,11 @@ namespace SavingRobotAdvisorApi.Common
             DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
             return attributes.Length > 0 ? attributes[0].Description : value.ToString();
         }
+
+        public static decimal GetRebateByCap(this decimal value, decimal rebateCapAmount)
+        {
+            return value < rebateCapAmount? value: rebateCapAmount;
+        }
     }
 
 }

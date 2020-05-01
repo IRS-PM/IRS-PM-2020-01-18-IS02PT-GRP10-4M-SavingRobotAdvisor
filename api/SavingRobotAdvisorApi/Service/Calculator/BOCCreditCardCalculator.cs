@@ -1,4 +1,5 @@
 using SavingRobotAdvisorApi.Models;
+using  SavingRobotAdvisorApi.Common;
 
 namespace SavingRobotAdvisorApi.Service
 {
@@ -12,16 +13,41 @@ namespace SavingRobotAdvisorApi.Service
             decimal rebateRate = 0;
             int duration = 12;
 
+            decimal monthlyDiningSpend = 0;
+            decimal monthlyGrocerySpend = 0;
+            decimal monthlyPetrolSpend = 0;
+            decimal monthlyPublicTransportSpend = 0;
+            decimal monthlyTelcoSpend = 0;
+            decimal monthlyTravelSpend = 0;
+            decimal monthlyRebate = 0;
+            decimal cardRebateCapAmount = 25;
+
+            /*
+                Valid Category:
+                Dining and Movies
+                Public Transport Transactions
+                Supermarket, Online purchases and Hospital
+            */
             if(monthlySpending.TotalAmount >=ruleMinimumSpend)
             {
-                decimal averageRebateRate = (10+5+3+3+0.30m)/5;
-                decimal monthlyRebate = monthlySpending.TotalAmount * averageRebateRate/100;
+                monthlyDiningSpend = monthlySpending.DiningPercent * monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 10m/100).GetRebateByCap(cardRebateCapAmount);
 
-                //Monthly cash rebate for BOC Family principal card is capped at S$100.
-                if(monthlyRebate > 100)
-                {
-                    monthlyRebate = 100;
-                }
+                monthlyGrocerySpend = monthlySpending.GroceryPercent *  monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 3m/100).GetRebateByCap(cardRebateCapAmount);
+
+                monthlyPetrolSpend = monthlySpending.PetrolPercent *  monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 0.30m/100).GetRebateByCap(cardRebateCapAmount);
+
+                monthlyPublicTransportSpend = monthlySpending.PublicTransportPercent *  monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 3m/100).GetRebateByCap(cardRebateCapAmount);
+
+                monthlyTelcoSpend = monthlySpending.TelcoPercent *  monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 0.30m/100).GetRebateByCap(cardRebateCapAmount);
+
+                monthlyTravelSpend = monthlySpending.TravelPercent *  monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 0.30m/100).GetRebateByCap(cardRebateCapAmount);
+
                 rebate = monthlyRebate * duration;
             }
             else if(monthlySpending.TotalAmount >= 0 && monthlySpending.TotalAmount < ruleMinimumSpend)

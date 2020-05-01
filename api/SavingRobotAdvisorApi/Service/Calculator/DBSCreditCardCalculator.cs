@@ -1,4 +1,5 @@
 using SavingRobotAdvisorApi.Models;
+using  SavingRobotAdvisorApi.Common;
 
 namespace SavingRobotAdvisorApi.Service
 {
@@ -12,14 +13,38 @@ namespace SavingRobotAdvisorApi.Service
             decimal rebate = 0;
             decimal rebateRate = 0;
             int duration = 12;
-            decimal averageRebateRate = (5m+1m+0.3m)/3;
+
+            decimal monthlyDiningSpend = 0;
+            decimal monthlyGrocerySpend = 0;
+            decimal monthlyPetrolSpend = 0;
+            decimal monthlyPublicTransportSpend = 0;
+            decimal monthlyTelcoSpend = 0;
+            decimal monthlyTravelSpend = 0;
+            decimal monthlyRebate = 0;
+            decimal cardRebateCapAmount = 40;
 
             if(ruleMinimumSpend < monthlySpending.TotalAmount)
             {
-                decimal monthlyRebateAmount = monthlySpending.TotalAmount * averageRebateRate/100;
-                if(monthlyRebateAmount>50)
-                    monthlyRebateAmount = 50;
-                rebate = monthlyRebateAmount*duration;
+                monthlyDiningSpend = monthlySpending.DiningPercent * monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * (10+5)/2m/100);
+
+                monthlyGrocerySpend = monthlySpending.GroceryPercent *  monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 5m/100).GetRebateByCap(cardRebateCapAmount);
+
+                monthlyPetrolSpend = monthlySpending.PetrolPercent *  monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 6m/100);
+
+                monthlyPublicTransportSpend = monthlySpending.PublicTransportPercent *  monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 0.3m/100);
+
+                monthlyTelcoSpend = monthlySpending.TelcoPercent *  monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 0.3m/100);
+
+                monthlyTravelSpend = monthlySpending.TravelPercent *  monthlySpending.TotalAmount;
+                monthlyRebate += (monthlyDiningSpend * 0.3m/100);
+
+
+                rebate = monthlyRebate*duration;
                 rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
             }
 

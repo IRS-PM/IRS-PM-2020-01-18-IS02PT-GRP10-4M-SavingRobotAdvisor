@@ -1,4 +1,5 @@
 using SavingRobotAdvisorApi.Models;
+using  SavingRobotAdvisorApi.Common;
 
 namespace SavingRobotAdvisorApi.Service
 {
@@ -8,22 +9,30 @@ namespace SavingRobotAdvisorApi.Service
     {
         public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
-            decimal ruleMinimumSpend = 500;
+            decimal ruleMinimumSpendTier1 = 500;
+            decimal ruleMinimumSpendTier2 = 1000;
+            decimal ruleMinimumSpendTier3 = 2000;
             decimal rebate = 0;
             decimal rebateRate = 0;
             int duration = 12;
+            decimal quarterlyRebate = 0;
 
-            if(monthlySpending.TotalAmount >= ruleMinimumSpend && monthlySpending.TotalAmount < 1500)
+            if(monthlySpending.TotalAmount >= ruleMinimumSpendTier1 && monthlySpending.TotalAmount < ruleMinimumSpendTier2)
             {
-                rebate = monthlySpending.TotalAmount * 3.30m/100 * duration;
+                quarterlyRebate = (monthlySpending.TotalAmount * 3.30m/100 * 3).GetRebateByCap(50);
+                rebate = quarterlyRebate*4;
                 rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
             }
-            else if(monthlySpending.TotalAmount >= 1500)
+            else if (monthlySpending.TotalAmount >= ruleMinimumSpendTier2 && monthlySpending.TotalAmount < ruleMinimumSpendTier3)
             {
-                decimal monthlyRebateAmount = monthlySpending.TotalAmount * 5.00m/100;
-                if(monthlyRebateAmount>100)
-                    monthlyRebateAmount = 100;
-                rebate =  monthlyRebateAmount * duration;
+                quarterlyRebate = (monthlySpending.TotalAmount * 3.30m/100 * 3).GetRebateByCap(100);
+                rebate = quarterlyRebate*4;
+                rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
+            }
+            else if(monthlySpending.TotalAmount >= ruleMinimumSpendTier3)
+            {
+                quarterlyRebate = (monthlySpending.TotalAmount * 5m/100 * 3).GetRebateByCap(300);
+                rebate = quarterlyRebate*4;
                 rebateRate = rebate/(monthlySpending.TotalAmount*duration)*100;
             }
 

@@ -7,24 +7,24 @@ namespace SavingRobotAdvisorApi.Service
     {
         public RebateResult Calculate(decimal monthlyIncome, decimal initialDeposit, MonthlySpending monthlySpending)
         {
-            decimal ruleMinimumSpendTier1 = 800;
-            decimal ruleMinimumSpendTier2 = 500;
+            decimal ruleMinimumSpendTier1 = 500;
+            decimal ruleMinimumSpendTier2 = 800;
             decimal rebate = 0;
             decimal rebateRate = 0;
             int duration = 12;
 
-            if(monthlySpending.TotalAmount>= ruleMinimumSpendTier1)
+            if(monthlySpending.TotalAmount>= ruleMinimumSpendTier2)
             {
-                decimal monthlyRebate = monthlySpending.TotalAmount * 8.00m/100;
+                decimal monthlyRebate = monthlySpending.TotalAmount * 8m/100;
                 if(monthlyRebate>80)
-                    monthlyRebate = 80;
+                    monthlyRebate = 80 + (monthlySpending.TotalAmount-80m/8/100)*0.3m/100;
                 rebate = monthlyRebate * duration;
             }
-            else if(monthlySpending.TotalAmount < ruleMinimumSpendTier1 && monthlySpending.TotalAmount > ruleMinimumSpendTier2)
+            else if(monthlySpending.TotalAmount < ruleMinimumSpendTier2 && monthlySpending.TotalAmount > ruleMinimumSpendTier1)
             {
-                rebate = monthlySpending.TotalAmount * 5.00m/100 * duration;
+                rebate = monthlySpending.TotalAmount * 5m/100 * duration;
             }
-            else if (monthlySpending.TotalAmount > 0 && monthlySpending.TotalAmount < ruleMinimumSpendTier2)
+            else if (monthlySpending.TotalAmount > 0 && monthlySpending.TotalAmount < ruleMinimumSpendTier1)
             {
                 rebate = monthlySpending.TotalAmount * 0.30m/100 * duration;
             }
