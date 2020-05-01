@@ -30,22 +30,22 @@ namespace SavingRobotAdvisorApi.Service
             */
             if(monthlySpending.TotalAmount >=ruleMinimumSpend)
             {
-                monthlyDiningSpend = monthlySpending.DiningPercent * monthlySpending.TotalAmount;
+                monthlyDiningSpend = monthlySpending.DiningPercent/100m * monthlySpending.TotalAmount;
                 monthlyRebate += (monthlyDiningSpend * 10m/100).GetRebateByCap(cardRebateCapAmount);
 
-                monthlyGrocerySpend = monthlySpending.GroceryPercent *  monthlySpending.TotalAmount;
+                monthlyGrocerySpend = monthlySpending.GroceryPercent/100m *  monthlySpending.TotalAmount;
                 monthlyRebate += (monthlyDiningSpend * 3m/100).GetRebateByCap(cardRebateCapAmount);
 
-                monthlyPetrolSpend = monthlySpending.PetrolPercent *  monthlySpending.TotalAmount;
+                monthlyPetrolSpend = monthlySpending.PetrolPercent/100m *  monthlySpending.TotalAmount;
                 monthlyRebate += (monthlyDiningSpend * 0.30m/100).GetRebateByCap(cardRebateCapAmount);
 
-                monthlyPublicTransportSpend = monthlySpending.PublicTransportPercent *  monthlySpending.TotalAmount;
+                monthlyPublicTransportSpend = monthlySpending.PublicTransportPercent/100m *  monthlySpending.TotalAmount;
                 monthlyRebate += (monthlyDiningSpend * 3m/100).GetRebateByCap(cardRebateCapAmount);
 
-                monthlyTelcoSpend = monthlySpending.TelcoPercent *  monthlySpending.TotalAmount;
+                monthlyTelcoSpend = monthlySpending.TelcoPercent/100m *  monthlySpending.TotalAmount;
                 monthlyRebate += (monthlyDiningSpend * 0.30m/100).GetRebateByCap(cardRebateCapAmount);
 
-                monthlyTravelSpend = monthlySpending.TravelPercent *  monthlySpending.TotalAmount;
+                monthlyTravelSpend = monthlySpending.TravelPercent/100m *  monthlySpending.TotalAmount;
                 monthlyRebate += (monthlyDiningSpend * 0.30m/100).GetRebateByCap(cardRebateCapAmount);
 
                 rebate = monthlyRebate * duration;
