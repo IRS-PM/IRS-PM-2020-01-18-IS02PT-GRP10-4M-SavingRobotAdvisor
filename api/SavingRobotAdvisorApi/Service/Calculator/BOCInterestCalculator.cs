@@ -27,7 +27,7 @@ namespace SavingRobotAdvisorApi.Service
             decimal ruleBaseInterestRate4 = 0.400m;
             decimal ruleBaseInterestRate4MiniAmount = 50000m;
             decimal ruleBaseInterestRate5 = 0.475m;
-            decimal ruleBaseInterestRate5MiniAmount = 10000m;
+            decimal ruleBaseInterestRate5MiniAmount = 100000m;
             #endregion
 
             #region Previailing Interest Calculation

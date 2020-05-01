@@ -16,7 +16,8 @@ namespace SavingRobotAdvisorApi.Controllers
        // Request URL : http://localhost:5000/api/SavingRobotAdvisor
        // Request Content-Type: application/json
        // Request Body: "{\"Income\":5000,\"Balance\":10000,\"MonthlySpending\":{\"TotalAmount\":2000,\"GroceryPercent\":0.35,\"DiningPercent\":0.25,\"PublicTransportPercent\":0.05,\"PetrolPercent\":0.2,\"TelcoPercent\":0.05,\"TravelPercent\":0.1}}"
-       [HttpGet]
+
+       [HttpPut]
        public ActionResult<List<OptimalResult>> Get([FromBody] string jsonRequestMessage)
         {
             var request = JsonConvert.DeserializeObject<RobotAdvisorRequest>(jsonRequestMessage);
