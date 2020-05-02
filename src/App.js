@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -29,6 +29,8 @@ import Link from "@material-ui/core/Link";
 import Tooltip from "@material-ui/core/Tooltip";
 import Slider from "@material-ui/core/Slider";
 import Input from "@material-ui/core/Input";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import {green} from "@material-ui/core/colors";
 
 const drawerWidth = 275;
 const apiServer = "gvinto.synology.me:32786";
@@ -88,6 +90,13 @@ const useStyles = makeStyles(theme => ({
     input: {
         width: 52,
         textAlign:'right',
+    },
+    buttonProgress: {
+        color: green[500],
+        position: 'absolute',
+        left: '50%',
+        marginTop: 6,
+        marginLeft: -12,
     },
 }));
 
@@ -175,12 +184,13 @@ function ResponsiveDrawer(props) {
     const [petrolValue, setPetrolValue] = React.useState(20/100*expense);
     const [telcoValue, setTelcoValue] = React.useState(5/100*expense);
     const [travelValue, setTravelValue] = React.useState(10/100*expense);
-
+    const [loading, setLoading] = React.useState(false);
 
     const {container} = props;
     const classes = useStyles();
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const myRef = useRef(null);
 
     useEffect(() => {
         document.title = "Savings Robot Advisor"
@@ -315,6 +325,7 @@ function ResponsiveDrawer(props) {
 
     const compareButtonClick = event => {
         if (income && expense && savings && income >= 0 && expense >= 0 && savings >= 0) {
+            setLoading(true);
             fetch('http://'+apiServer+'/api/SavingRobotAdvisor', {
                 method: "PUT",
                 headers: {
@@ -333,11 +344,17 @@ function ResponsiveDrawer(props) {
             })
                 .then(res => res.json())
                 .then((data) => {
-                    console.log(data);
+                    //console.log(data);
                     data.sort((a, b) => (a.interest + a.rebate > b.interest + b.rebate) ? -1 : 1);
                     const results = data.map(processResult);
-                    console.log(results);
+                    //console.log(results);
                     setResults(results);
+                    setLoading(false);
+                    window.scrollTo({
+                        top: myRef.current.offsetTop-80,
+                        left: 0,
+                        behavior: 'smooth'
+                    });
                 })
                 .catch(console.log);
         } else {
@@ -583,9 +600,12 @@ function ResponsiveDrawer(props) {
 
 
                 <Grid item xs={12}>
-                    <Button onClick={compareButtonClick} variant="contained" fullWidth={true} color="primary">
-                        Compare Banks
-                    </Button>
+                    <div>
+                        <Button onClick={compareButtonClick} variant="contained" fullWidth={true} disabled={loading} color="primary">
+                            Compare Banks
+                        </Button>
+                        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    </div>
                 </Grid>
             </Grid>
         </div>
@@ -666,7 +686,7 @@ function ResponsiveDrawer(props) {
                         </ul>
                     </ul>
                 </Typography>
-
+                <div ref={myRef}>
 
                     {results.map(item => (
 
@@ -685,7 +705,7 @@ function ResponsiveDrawer(props) {
 
                     ))}
 
-
+                </div>
             </main>
         </div>
     );
