@@ -33,8 +33,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import {green} from "@material-ui/core/colors";
 
 const drawerWidth = 275;
-const apiServer = "gvinto.synology.me:32786";
-//const apiServer = "localhost:5000";
+//const apiServer = "gvinto.synology.me:32786";
+const apiServer = "localhost:5000";
 
 const useStyles = makeStyles(theme => ({
     root: {
