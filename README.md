@@ -31,7 +31,7 @@ The system has identified the highest interest savings account and cash back cre
 
 | Official Full Name | Student ID | Work Items |
 | ------------ | --------------- | ----- | 
-| Ng Ziming Vincent | A0213488Y | System architecture, Market Research, Frontend Web-UI |
+| Ng Ziming Vincent | A0213488Y | Project Lead, System architecture, Frontend Web-UI |
 | Zhou Zhe | A0213542R | Market Research, Knowledge Acquisition, Backend REST API |
 | Li Yian | A0101907N | Data Mining, Knowledge Discovery |
 | Dong Xiaoguang | A0066960X | Project Video, Project Documentation |
