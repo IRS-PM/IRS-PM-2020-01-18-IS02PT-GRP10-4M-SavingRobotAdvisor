@@ -1,147 +1,106 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and dotnet core 2.2 Web Api.
+﻿
+## SECTION 1 : PROJECT TITLE
+## Savings Robot Advisor (SRA)
 
-## Setup instructions for frontend
+<img src="Images/Screenshot.png"
+     style="float: left; margin-right: 0px;" />
 
-Before installing you must have npm and node installed, if not please go through the below link
+---
 
-https://nodejs.org/en/
+## SECTION 2 : EXECUTIVE SUMMARY / PAPER ABSTRACT
+The Saving Robot Advisor is a minimum viable product. It is mainly focused on saving interests as well as credit cash back.
+To bear “easy for everyone to access” in mind, the Saving Robot Advisor requires no username or password to start with. Main functional page will be directly shown to users. The designers keep the application easy to access and direct in outcome.
+Research shows over 70 per cent of Singapore’s emerging affluent used savings accounts. In other words, majority of the population who with monthly income between S$5,000 and S$10,600 are using saving accounts. Then how to choose a proper account will not be a small issue anymore. This is where the team starts to think about the project’s direction.
+Besides saving interests, the team notice that credit cards’ cash back is another part which maximize daily earn. There are hundreds of credit cards on the market. To choose the ones suit different life styles is another headache. Thus the second main function kicks in and combined with saving account choosing.
+The Saving Robot Advisor is focused on absolute monetary value which is saving interests plus credit rebate. There will be no points or miles in the scope. Bank wise, all banks on the market are taken into consideration. Users won’t miss anyone.
+The system has identified the highest interest savings account and cash back credit card from each bank. Based on that, 8 savings accounts and credit cards pairs are shortlisted through primary and secondary research.
+---
 
-https://www.npmjs.com/get-npm
+## SECTION 3 : CREDITS / PROJECT CONTRIBUTION
 
-Recommended to use Webstorm IDE. Register as educational user for free license
-(https://www.jetbrains.com/student/)
+| Official Full Name | Student ID | Work Items |
+| :------------ |:---------------:| :-----| :-----|
+| Ng Ziming Vincent | A0213488Y | System architecture, Market Research, Frontend Web-UI |
+| Zhou Zhe | A0213542R | Market Research, Knowledge Acquisition, Backend REST API |
+| Li Yian | A1234567C | Data Mining, Knowledge Discovery |
+| Dong Xiaoguang | A0066960X | Project Video, Project Documentation |
 
-https://www.jetbrains.com/webstorm/
 
+---
 
-##### Step 1:
-Copy the Github URL:
-https://github.com/gvinto/IRS-MRS-2020-01-18-IS02PT-GRP-4M-SavingRobotAdvisor
+## SECTION 4 : VIDEO OF SYSTEM MODELLING & USE CASE DEMO
 
-##### Step 2:
-Checkout the project from Github in Webstorm
-https://www.jetbrains.com/help/webstorm/manage-projects-hosted-on-github.html
+[![Savings Robot Advisor](http://img.youtube.com/vi/ysayEPK-OYg/0.jpg)](https://www.youtube.com/watch?v=ysayEPK-OYg "Savings Robot Advisor")
 
-##### Step 3: 
-/* Delete the node_modules folder and any 'lock' files such as 
-yarn.lock or package-lock.json if present.*/
+---
 
-##### Step 4: 
-Install project dependencies (this will take a while)
+## SECTION 5 : USER GUIDE
 
-`npm install` (Webstorm will usually prompt this after checkout)
+`Refer to appendix <Installation & User Guide> in project report at Github Folder: ProjectReport`
 
-##### Step 5:
-Add a run configuration for 'npm start'
-https://www.jetbrains.com/help/webstorm/run-debug-configuration-npm.html
+### [ 1 ] To run the system using iss-vm
 
-Run the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> download pre-built virtual machine from http://bit.ly/iss-vm
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+> start iss-vm
 
-#Additional information
-## Available Scripts
+> open new terminal window in iss-vm
 
-In the project directory, you can run:
+> mkdir SRA
 
-### `npm start`
+#### Install latest Nodejs:
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+> sudo apt-get install -y nodejs
 
-### `npm test`
+#### Install lightweight static web server:
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+> sudo npm install -g serve
 
-### `npm run build`
+#### Backend setup and deployment:
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+> cd SRA
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+> wget https://github.com/loxyzhou/IRS-MRS-2020-01-18-IS02PT-GRP-4M-SavingRobotAdvisor/raw/master/deployment/SRA-backend.zip
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+> unzip SRA-backend.zip
 
-### `npm run eject`
+> ./publish/SavingRobotAdvisorApi
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### Frontend setup and deployment:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+> Open another new terminal window
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+> cd SRA
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+> wget https://github.com/loxyzhou/IRS-MRS-2020-01-18-IS02PT-GRP-4M-SavingRobotAdvisor/raw/master/deployment/SRA-frontend.zip
 
-## Learn More
+> unzip SRA-frontend.zip
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+> serve -s build -l 3000
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+> **Go to URL using web browser** http://localhost:3000 or http://127.0.0.1:3000
 
-### Code Splitting
+### [ 2 ] To access the online system:
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+> **Go to URL using web browser** http://gvinto.synology.me:3000/
 
-### Analyzing the Bundle Size
+---
+## SECTION 6 : PROJECT REPORT / PAPER
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+`Refer to project report at Github Folder: ProjectReport`
 
-### Making a Progressive Web App
+---
+## SECTION 7 : MISCELLANEOUS
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+`Refer to Github Folder: Miscellaneous`
 
-### Advanced Configuration
+### wealth-expectancy-report-2019.pdf
+* Insights derived on market demand for Savings Accounts as an investment vehicle
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+### Savings and CC products.xlsx
+* Market Research, which were subsequently implemented into knowledge base
 
-### Deployment
+---
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-
-## Setup instructions for backend Web Api
-
-##### Step 1:
-Download IDE Visual Studio Code: https://code.visualstudio.com/download
-Download Dotnet Core 2.2 SDK: https://dotnet.microsoft.com/download/dotnet-core/2.2
-
-#### Step 2:
-Open Visual Studio Code IDE and click Extension icon/button at left side of window,
-then type keywords 'C#' in the extension search box to enable C# language for Visual Studio Code
-
-#### Step 3:
-Click File menu from top left corner in Visual Studio Code and select 'Open Folder',
-to choose the folder name 'SavingRobotAdvisorApi', which is the source code of dotnet core web api downloaded in the beginning of frontend setup instruction.
-
-#### Step 4: 
-1. Press "Ctrl+`" to open Terminal in Visual Studio Code.
-2. Navigate to project folder IRS-MRS-2020-01-18-IS02PT-GRP-4M-SavingRobotAdvisor\api\SavingRobotAdvisorApi
-3. Type command "dotnet build" to wait for build successful status
-4. Type command "dotnet run" to web api application (The default web api URL http://localhost:5000 will be launched and opened in browser)
-5. Copy the below test Request URL and open it in Postman for web api testing
-   Request URL : http://localhost:5000/api/SavingRobotAdvisor
-   Request Method: HTTP Get
-   Request Content-Type: application/json
-   Request Body: "{\"Income\":5000,\"Balance\":10000,\"MonthlySpending\":{\"TotalAmount\":2000,\"GroceryPercent\":0.35,\"DiningPercent\":0.25,\"PublicTransportPercent\":0.05,\"PetrolPercent\":0.2,\"TelcoPercent\":0.05,\"TravelPercent\":0.1}}"
-6. The below sample response will be returned by web api:
-[{
-  "bank": "UOB",
-  "account": "UOBONE",
-  "card": "UOBONE",
-  "interest": 577.5,
-  "interest_rate": 1.92,
-  "rebate": 198,
-  "rebate_rate": 3.3
-}]
-7. Web Api setup finished.
-8. Alternatively, just press F5 in visual studio code to launch web api endpoint in a fast way.
