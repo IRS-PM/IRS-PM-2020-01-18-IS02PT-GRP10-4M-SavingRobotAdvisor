@@ -2,12 +2,17 @@
 ## SECTION 1 : PROJECT TITLE
 ## Savings Robot Advisor (SRA)
 
+
+<img src="Images/Logo_Text.png"
+     style="float: left; margin-right: 0px;" />
+
 <img src="Images/Screenshot.png"
      style="float: left; margin-right: 0px;" />
 
 ---
 
 ## SECTION 2 : EXECUTIVE SUMMARY / PAPER ABSTRACT
+
 The Saving Robot Advisor is a minimum viable product. It is mainly focused on saving interests as well as credit cash back.
 
 To bear "easy for everyone to access" in mind, the Saving Robot Advisor requires no username or password to start with. Main functional page will be directly shown to users. The designers keep the application easy to access and direct in outcome.
@@ -19,6 +24,7 @@ Besides saving interests, the team notice that credit cards’ cash back is anot
 The Saving Robot Advisor is focused on absolute monetary value which is saving interests plus credit rebate. There will be no points or miles in the scope. Bank wise, all banks on the market are taken into consideration. Users won't miss anyone.
 
 The system has identified the highest interest savings account and cash back credit card from each bank. Based on that, 8 savings accounts and credit cards pairs are shortlisted through primary and secondary research.
+
 ---
 
 ## SECTION 3 : CREDITS / PROJECT CONTRIBUTION
@@ -27,7 +33,7 @@ The system has identified the highest interest savings account and cash back cre
 | ------------ | --------------- | ----- | 
 | Ng Ziming Vincent | A0213488Y | System architecture, Market Research, Frontend Web-UI |
 | Zhou Zhe | A0213542R | Market Research, Knowledge Acquisition, Backend REST API |
-| Li Yian | A1234567C | Data Mining, Knowledge Discovery |
+| Li Yian | A0101907N | Data Mining, Knowledge Discovery |
 | Dong Xiaoguang | A0066960X | Project Video, Project Documentation |
 
 
