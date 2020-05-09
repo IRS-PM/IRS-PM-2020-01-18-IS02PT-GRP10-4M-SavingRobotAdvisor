@@ -9,17 +9,22 @@
 
 ## SECTION 2 : EXECUTIVE SUMMARY / PAPER ABSTRACT
 The Saving Robot Advisor is a minimum viable product. It is mainly focused on saving interests as well as credit cash back.
-To bear “easy for everyone to access” in mind, the Saving Robot Advisor requires no username or password to start with. Main functional page will be directly shown to users. The designers keep the application easy to access and direct in outcome.
+
+To bear "easy for everyone to access" in mind, the Saving Robot Advisor requires no username or password to start with. Main functional page will be directly shown to users. The designers keep the application easy to access and direct in outcome.
+
 Research shows over 70 per cent of Singapore’s emerging affluent used savings accounts. In other words, majority of the population who with monthly income between S$5,000 and S$10,600 are using saving accounts. Then how to choose a proper account will not be a small issue anymore. This is where the team starts to think about the project’s direction.
+
 Besides saving interests, the team notice that credit cards’ cash back is another part which maximize daily earn. There are hundreds of credit cards on the market. To choose the ones suit different life styles is another headache. Thus the second main function kicks in and combined with saving account choosing.
-The Saving Robot Advisor is focused on absolute monetary value which is saving interests plus credit rebate. There will be no points or miles in the scope. Bank wise, all banks on the market are taken into consideration. Users won’t miss anyone.
+
+The Saving Robot Advisor is focused on absolute monetary value which is saving interests plus credit rebate. There will be no points or miles in the scope. Bank wise, all banks on the market are taken into consideration. Users won't miss anyone.
+
 The system has identified the highest interest savings account and cash back credit card from each bank. Based on that, 8 savings accounts and credit cards pairs are shortlisted through primary and secondary research.
 ---
 
 ## SECTION 3 : CREDITS / PROJECT CONTRIBUTION
 
 | Official Full Name | Student ID | Work Items |
-| :------------ |:---------------:| :-----| :-----|
+| ------------ | --------------- | ----- | 
 | Ng Ziming Vincent | A0213488Y | System architecture, Market Research, Frontend Web-UI |
 | Zhou Zhe | A0213542R | Market Research, Knowledge Acquisition, Backend REST API |
 | Li Yian | A1234567C | Data Mining, Knowledge Discovery |
